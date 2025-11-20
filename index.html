@@ -12,10 +12,27 @@
 
       gtag('config', 'G-7X48YNP2P6');
     </script>
-    <title>Water Cycle Diagram Online</title>
+    <title>Water Cycle Diagram - Interactive 4 Stages Animation | Free Learning Tool</title>
     <link rel="icon" type="image/png" href="favicon.png">
-    <meta name="description" content="water cycle diagram showing 4, 7, or 8 steps. Learn evaporation, condensation, precipitation, and collection with animations. Perfect for students and teachers.">
-    <meta name="keywords" content="water cycle, water cycle diagram, 4 stages of water cycle, 7 steps water cycle, evaporation, condensation, precipitation">
+    <meta name="description" content="Interactive Water Cycle Diagram showing 4 stages: evaporation, condensation, precipitation, and collection. Free animated learning tool for students and teachers!">
+    <meta name="keywords" content="water cycle diagram, 4 stages water cycle, water cycle animation, evaporation, condensation, precipitation, collection, interactive water cycle, water cycle for students, water cycle for kids">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://senvnv.com/">
+    <meta property="og:title" content="Water Cycle Diagram: Interactive Learning Tool">
+    <meta property="og:description" content="Learn the water cycle with our interactive diagram showing 4, 7, and 8 steps. Perfect for students and teachers.">
+    <meta property="og:image" content="https://senvnv.com/favicon.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://senvnv.com/">
+    <meta property="twitter:title" content="Water Cycle Diagram: Interactive Learning">
+    <meta property="twitter:description" content="Interactive water cycle diagram with animations for students">
+    <meta property="twitter:image" content="https://senvnv.com/favicon.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://senvnv.com/">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
     <style>
         * {
@@ -397,6 +414,14 @@
             border: 2px solid #999999;
         }
 
+        .quiz-question-container {
+            display: block;
+        }
+
+        .quiz-question-container.hidden {
+            display: none;
+        }
+
         @media (max-width: 1024px) {
             .container {
                 padding: 15px;
@@ -733,13 +758,39 @@
     <div class="quiz-section-container">
         <div class="quiz-content">
             <h2>Test Your Knowledge</h2>
-            <p class="quiz-question-text">What happens when water vapor cools in the atmosphere?</p>
-            <div class="quiz-options">
-                <button class="quiz-btn quiz-btn-correct" onclick="checkAnswer('condensation')">It forms clouds (Condensation)</button>
-                <button class="quiz-btn quiz-btn-wrong" onclick="checkAnswer('wrong1')">It falls as rain immediately</button>
-                <button class="quiz-btn quiz-btn-wrong" onclick="checkAnswer('wrong2')">It evaporates more</button>
+            
+            <!-- Question 1 -->
+            <div class="quiz-question-container" id="quiz-1" data-quiz-index="0">
+                <p class="quiz-question-text">Question 1/3: What happens when water vapor cools in the atmosphere?</p>
+                <div class="quiz-options">
+                    <button class="quiz-btn" onclick="checkAnswer(0, 0)">It forms clouds (Condensation)</button>
+                    <button class="quiz-btn" onclick="checkAnswer(1, 0)">It falls as rain immediately</button>
+                    <button class="quiz-btn" onclick="checkAnswer(2, 0)">It evaporates more</button>
+                </div>
+                <div class="quiz-result" data-quiz-result="0"></div>
             </div>
-            <div class="quiz-result" id="quizResult"></div>
+            
+            <!-- Question 2 -->
+            <div class="quiz-question-container" id="quiz-2" data-quiz-index="1" style="display: none;">
+                <p class="quiz-question-text">Question 2/3: Which stage of the water cycle involves water falling from clouds?</p>
+                <div class="quiz-options">
+                    <button class="quiz-btn" onclick="checkAnswer(0, 1)">Evaporation</button>
+                    <button class="quiz-btn" onclick="checkAnswer(1, 1)">Precipitation</button>
+                    <button class="quiz-btn" onclick="checkAnswer(2, 1)">Collection</button>
+                </div>
+                <div class="quiz-result" data-quiz-result="1"></div>
+            </div>
+            
+            <!-- Question 3 -->
+            <div class="quiz-question-container" id="quiz-3" data-quiz-index="2" style="display: none;">
+                <p class="quiz-question-text">Question 3/3: Where does most of the water evaporation come from on Earth?</p>
+                <div class="quiz-options">
+                    <button class="quiz-btn" onclick="checkAnswer(0, 2)">Rivers and lakes</button>
+                    <button class="quiz-btn" onclick="checkAnswer(1, 2)">Oceans and seas</button>
+                    <button class="quiz-btn" onclick="checkAnswer(2, 2)">Mountains</button>
+                </div>
+                <div class="quiz-result" data-quiz-result="2"></div>
+            </div>
         </div>
     </div>
 
@@ -752,14 +803,6 @@
                 <div class="faq-item">
                     <div class="faq-question">What are the 4 stages of the water cycle?</div>
                     <div class="faq-answer">The 4 basic stages are: Evaporation, Condensation, Precipitation, and Collection.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">What are the 7 steps in the water cycle?</div>
-                    <div class="faq-answer">The 7 steps include: Evaporation, Transpiration, Sublimation, Condensation, Precipitation, Runoff, and Infiltration.</div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">What are the 8 steps of the water cycle?</div>
-                    <div class="faq-answer">The 8 steps are: Evaporation, Transpiration, Sublimation, Condensation, Precipitation, Runoff, Infiltration, and Collection in oceans/lakes.</div>
                 </div>
             </div>
 
@@ -827,7 +870,8 @@
                 active: false,
                 timer: 0,
                 x: 0
-            }
+            },
+            currentQuizIndex: 0
         };
 
         let stepTimer = null;
@@ -1327,15 +1371,114 @@
             saveCanvas('water-cycle-diagram', 'png');
         }
 
-        function checkAnswer(answer) {
-            const result = document.getElementById('quizResult');
-            if (answer === 'condensation') {
-                result.className = 'quiz-result correct';
-                result.textContent = '✓ Correct! Water vapor condenses to form clouds.';
-            } else {
-                result.className = 'quiz-result incorrect';
-                result.textContent = '✗ Try again! Think about what happens when warm air rises and cools.';
+        // ═══════════════════════════════════════════════════════════════════════
+        // QUIZ DATA (for SEO and functionality)
+        // ═══════════════════════════════════════════════════════════════════════
+
+        const QUIZ_QUESTIONS = [
+            {
+                correctAnswers: [0],
+                correctMessage: "✓ Correct! Water vapor condenses to form clouds.",
+                incorrectMessage: "✗ Try again! Think about what happens when warm air rises and cools."
+            },
+            {
+                correctAnswers: [1],
+                correctMessage: "✓ Correct! Precipitation is when water falls from clouds as rain or snow.",
+                incorrectMessage: "✗ Try again! Think about what happens when clouds get too heavy."
+            },
+            {
+                correctAnswers: [1],
+                correctMessage: "✓ Correct! Oceans cover 71% of Earth's surface and provide most evaporation.",
+                incorrectMessage: "✗ Try again! Think about which water body covers most of our planet."
             }
+        ];
+
+        function showQuiz(index) {
+            // 隐藏所有问题
+            document.querySelectorAll('.quiz-question-container').forEach((container, i) => {
+                if (i === index) {
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                }
+            });
+        }
+
+        function goToNextQuestion() {
+            state.currentQuizIndex++;
+            showQuiz(state.currentQuizIndex);
+            // 重置下一题的按钮状态
+            const nextContainer = document.querySelector(`[data-quiz-index="${state.currentQuizIndex}"]`);
+            const nextButtons = nextContainer.querySelectorAll('.quiz-btn');
+            nextButtons.forEach(btn => btn.disabled = false);
+            const nextResult = nextContainer.querySelector(`[data-quiz-result="${state.currentQuizIndex}"]`);
+            nextResult.className = 'quiz-result';
+            nextResult.style.display = 'none';
+        }
+
+        function checkAnswer(optionIndex, quizIndex) {
+            if (quizIndex !== state.currentQuizIndex) return;
+            
+            const question = QUIZ_QUESTIONS[quizIndex];
+            const isCorrect = question.correctAnswers.includes(optionIndex);
+            const quizContainer = document.querySelector(`[data-quiz-index="${quizIndex}"]`);
+            const resultEl = quizContainer.querySelector(`[data-quiz-result="${quizIndex}"]`);
+            const optionsEl = quizContainer.querySelector('.quiz-options');
+            const buttons = optionsEl.querySelectorAll('.quiz-btn');
+            
+            // 禁用所有按钮
+            buttons.forEach(btn => btn.disabled = true);
+            
+            if (isCorrect) {
+                resultEl.className = 'quiz-result correct';
+                resultEl.style.display = 'block';
+
+                if (state.currentQuizIndex < QUIZ_QUESTIONS.length - 1) {
+                    // 显示"下一题"按钮
+                    resultEl.innerHTML = `
+                        <div style="margin-bottom: 20px;">${question.correctMessage}</div>
+                        <button onclick="goToNextQuestion()" style="
+                            width: 100%;
+                            padding: 16px 24px;
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            color: white;
+                            border: none;
+                            border-radius: 12px;
+                            font-size: 16px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.4)';">
+                            Continue to Next Question →
+                        </button>
+                    `;
+                } else {
+                    // 所有题目都完成了
+                    resultEl.innerHTML = '<div style="font-size: 18px; line-height: 1.6;">🎉 Congratulations! You completed all questions!</div>';
+                }
+            } else {
+                resultEl.className = 'quiz-result incorrect';
+                resultEl.textContent = question.incorrectMessage;
+                resultEl.style.display = 'block';
+
+                // 答错后恢复按钮状态
+                setTimeout(() => {
+                    buttons.forEach(btn => btn.disabled = false);
+                    resultEl.className = 'quiz-result';
+                    resultEl.style.display = 'none';
+                    resultEl.textContent = '';
+                }, 2000);
+            }
+        }
+
+        // 初始化：显示第一题
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                showQuiz(0);
+            });
+        } else {
+            showQuiz(0);
         }
     </script>
 </body>
