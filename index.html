@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7X48YNP2P6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-7X48YNP2P6');
+    </script>
+    <title>Water Cycle Diagram Online</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta name="description" content="water cycle diagram showing 4, 7, or 8 steps. Learn evaporation, condensation, precipitation, and collection with animations. Perfect for students and teachers.">
+    <meta name="keywords" content="water cycle, water cycle diagram, 4 stages of water cycle, 7 steps water cycle, evaporation, condensation, precipitation">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 50%, #90EE90 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: transparent;
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: none;
+        }
+
+        .header h1 {
+            color: #000000;
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: #666666;
+            font-size: 18px;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .canvas-area {
+            width: 100%;
+            height: 500px;
+            border-radius: 18px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .controls-area {
+            width: 100%;
+            padding: 30px 0;
+        }
+
+        .steps-title {
+            color: #000000;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .step-card {
+            background: #fff;
+            border: 1px solid #e1e8ed;
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-color: #3498db;
+        }
+
+        .step-card.active {
+            border: 2px solid #3498db;
+            background: #f0f7fc;
+        }
+
+        .step-card.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            width: 100%;
+            background: #3498db;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .step-number {
+            background: #eceff1;
+            color: #546e7a;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-card.active .step-number {
+            background: #3498db;
+            color: white;
+        }
+
+        .step-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .step-desc {
+            font-size: 13px;
+            color: #78909c;
+            line-height: 1.5;
+        }
+
+        .display-options {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            width: 100%;
+            padding: 14px 20px;
+            margin-bottom: 10px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #000000;
+            color: white;
+            border-color: #000000;
+        }
+
+        .btn-primary:hover {
+            background: #333333;
+            border-color: #333333;
+        }
+
+        .btn-success {
+            background: #ffffff;
+            color: #000000;
+            border-color: #e5e5e5;
+        }
+
+        .btn-success:hover {
+            background: #fafafa;
+            border-color: #000000;
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            color: #666666;
+            border-color: #e5e5e5;
+        }
+
+        .btn-secondary:hover {
+            background: #fafafa;
+            border-color: #000000;
+            color: #000000;
+        }
+
+        .faq-section {
+            background: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-left: 2px solid #000000;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .faq-section h3 {
+            color: #000000;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .faq-item {
+            margin-bottom: 12px;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .faq-answer {
+            color: #666666;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-left: 2px solid #000000;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box h3 {
+            color: #000000;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+            color: #666666;
+            line-height: 1.8;
+            font-size: 13px;
+        }
+
+        .toggle-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: transparent;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            min-width: fit-content;
+            gap: 15px;
+        }
+
+        .toggle-option label {
+            font-size: 14px;
+            color: #000000;
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 26px;
+            background: #e5e5e5;
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle-switch.active {
+            background: #000000;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: white;
+            top: 2px;
+            left: 2px;
+            transition: left 0.2s;
+        }
+
+        .toggle-switch.active::after {
+            left: 26px;
+        }
+
+        .quiz-section-container {
+            padding: 50px 20px;
+            margin: 40px 0;
+        }
+
+        .quiz-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .quiz-content h2 {
+            color: #000000;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question-text {
+            color: #666666;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-btn {
+            width: 100%;
+            padding: 16px 24px;
+            border: 2px solid #e5e5e5;
+            background: #ffffff;
+            color: #000000;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .quiz-btn:hover {
+            border-color: #000000;
+            background: #fafafa;
+        }
+
+        .quiz-result {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+            font-size: 16px;
+        }
+
+        .quiz-result.correct {
+            background: #f0f0f0;
+            color: #000000;
+            display: block;
+            border: 2px solid #000000;
+        }
+
+        .quiz-result.incorrect {
+            background: #f0f0f0;
+            color: #666666;
+            display: block;
+            border: 2px solid #999999;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding: 15px;
+            }
+
+            .canvas-area {
+                min-height: 500px;
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .header p {
+                font-size: 16px;
+            }
+
+            .container {
+                padding: 10px;
+                gap: 15px;
+            }
+
+            .canvas-area {
+                min-height: 400px;
+            }
+
+            .steps-title {
+                font-size: 20px;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .display-options {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .seo-section {
+                padding: 50px 15px;
+            }
+
+            .seo-container {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+
+            .quiz-section-container {
+                padding: 40px 15px;
+            }
+
+            .quiz-content h2 {
+                font-size: 24px;
+            }
+
+            .quiz-question-text {
+                font-size: 16px;
+            }
+
+            .quiz-btn {
+                font-size: 15px;
+                padding: 14px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+                margin-bottom: 8px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 8px;
+                gap: 10px;
+            }
+
+            .canvas-area {
+                min-height: 350px;
+            }
+
+            .steps-title {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+
+            .controls-area {
+                padding: 20px 0;
+            }
+
+            .step-card {
+                padding: 12px;
+            }
+
+            .step-name {
+                font-size: 14px;
+            }
+
+            .step-desc {
+                font-size: 13px;
+            }
+
+            .control-btn {
+                padding: 12px 18px;
+                font-size: 15px;
+            }
+
+            .faq-question,
+            .faq-answer {
+                font-size: 13px;
+            }
+
+            .info-box ul {
+                font-size: 12px;
+                line-height: 1.6;
+            }
+
+            .footer {
+                padding: 15px;
+                font-size: 13px;
+            }
+
+            .seo-section {
+                padding: 40px 15px;
+            }
+
+            .seo-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .quiz-section-container {
+                padding: 30px 15px;
+            }
+
+            .quiz-content h2 {
+                font-size: 22px;
+            }
+
+            .quiz-question-text {
+                font-size: 15px;
+            }
+
+            .quiz-btn {
+                font-size: 14px;
+                padding: 12px 18px;
+            }
+        }
+
+        .seo-section {
+            background: transparent;
+            padding: 60px 20px;
+            border-top: none;
+        }
+
+        .seo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .seo-column h3 {
+            color: #000000;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .seo-column .faq-item {
+            margin-bottom: 20px;
+        }
+
+        .seo-column .faq-question {
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .seo-column .faq-answer {
+            color: #666666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .seo-column ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .seo-column ul li {
+            color: #666666;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .seo-column ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #000000;
+            font-weight: bold;
+        }
+
+        .seo-column p {
+            color: #666666;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer {
+            background: transparent;
+            padding: 20px;
+            text-align: center;
+            color: #666666;
+            font-size: 14px;
+            border-top: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><img style="width: 48px;" src="favicon.png" alt="Water Cycle Logo">Water Cycle Diagram</h1>
+        <p>Learn the 4 stages of water cycle with interactive animation and clear explanations</p>
+    </div>
+
+    <div class="container">
+        <div class="canvas-area">
+            <div id="canvas-container"></div>
+        </div>
+
+        <div class="controls-area">
+            <!-- Steps Title -->
+            <h2 class="steps-title" id="stepsTitle">Water Cycle - 4 Stages</h2>
+
+            <!-- Steps Grid -->
+            <div class="steps-grid" id="stepsContainer"></div>
+
+            <!-- Display Options -->
+            <div class="display-options">
+                <div class="toggle-option">
+                    <label>Show Labels</label>
+                    <div class="toggle-switch active" onclick="toggleProcess('labels', this)"></div>
+                </div>
+                <div class="toggle-option">
+                    <label>Animation</label>
+                    <div class="toggle-switch active" id="animationToggle" onclick="toggleAnimation(this)"></div>
+                </div>
+                <div class="toggle-option" onclick="downloadCanvas()" style="cursor: pointer;">
+                    <label style="cursor: pointer;">Download Image</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="quiz-section-container">
+        <div class="quiz-content">
+            <h2>Test Your Knowledge</h2>
+            <p class="quiz-question-text">What happens when water vapor cools in the atmosphere?</p>
+            <div class="quiz-options">
+                <button class="quiz-btn quiz-btn-correct" onclick="checkAnswer('condensation')">It forms clouds (Condensation)</button>
+                <button class="quiz-btn quiz-btn-wrong" onclick="checkAnswer('wrong1')">It falls as rain immediately</button>
+                <button class="quiz-btn quiz-btn-wrong" onclick="checkAnswer('wrong2')">It evaporates more</button>
+            </div>
+            <div class="quiz-result" id="quizResult"></div>
+        </div>
+    </div>
+
+    <!-- SEO Content Section -->
+    <div class="seo-section">
+        <div class="seo-container">
+            <!-- FAQ Column -->
+            <div class="seo-column">
+                <h3>Common Questions Answered</h3>
+                <div class="faq-item">
+                    <div class="faq-question">What are the 4 stages of the water cycle?</div>
+                    <div class="faq-answer">The 4 basic stages are: Evaporation, Condensation, Precipitation, and Collection.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What are the 7 steps in the water cycle?</div>
+                    <div class="faq-answer">The 7 steps include: Evaporation, Transpiration, Sublimation, Condensation, Precipitation, Runoff, and Infiltration.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What are the 8 steps of the water cycle?</div>
+                    <div class="faq-answer">The 8 steps are: Evaporation, Transpiration, Sublimation, Condensation, Precipitation, Runoff, Infiltration, and Collection in oceans/lakes.</div>
+                </div>
+            </div>
+
+            <!-- Did You Know Column -->
+            <div class="seo-column">
+                <h3>Did You Know?</h3>
+                <ul>
+                    <li>The water cycle has been happening for billions of years</li>
+                    <li>Water on Earth today is the same water dinosaurs drank</li>
+                    <li>97% of Earth's water is in the oceans</li>
+                    <li>Only 3% is freshwater, and most is frozen</li>
+                    <li>A water drop can spend 3,000 years in the ocean</li>
+                </ul>
+            </div>
+
+            <!-- How to Explain Column -->
+            <div class="seo-column">
+                <h3>How to Explain the Water Cycle</h3>
+                <p>The water cycle is nature's way of recycling water. The sun heats water in oceans and lakes, turning it into vapor (evaporation). This vapor rises and cools to form clouds (condensation). When clouds get heavy, water falls as rain or snow (precipitation). The water then flows back to oceans and lakes (collection), and the cycle repeats forever.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Educational resource for students and teachers | Water Cycle Diagram © 2024
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════════════
+        // CONFIG
+        // ═══════════════════════════════════════════════════════════════════════
+
+        const CONFIG = {
+            colors: {
+                skyTop: [135, 206, 235],
+                skyBottom: [230, 245, 255],
+                ocean: [64, 164, 223],
+                oceanDeep: [41, 128, 185],
+                mountain: [120, 144, 156],
+                land: [165, 214, 167],
+                sun: [255, 213, 79]
+            }
+        };
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // GAME STATE
+        // ═══════════════════════════════════════════════════════════════════════
+
+        let state = {
+            showLabels: true,
+            showFlow: true,
+            activeStep: null,
+            particles: [],
+            clouds: [],
+            ripples: [],
+            lightning: {
+                active: false,
+                timer: 0,
+                x: 0
+            }
+        };
+
+        let stepTimer = null;
+
+        const STEP_DEFINITIONS = [
+            { id: 'evaporation', name: 'Evaporation', desc: 'Sun heats water, turning it into rising vapor.', focus: {x: 0.8, y: 0.8} },
+            { id: 'condensation', name: 'Condensation', desc: 'Vapor cools down to form clouds.', focus: {x: 0.5, y: 0.2} },
+            { id: 'precipitation', name: 'Precipitation', desc: 'Clouds release water as rain or snow.', focus: {x: 0.3, y: 0.5} },
+            { id: 'collection', name: 'Collection', desc: 'Water flows into rivers and oceans.', focus: {x: 0.6, y: 0.85} }
+        ];
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // P5.JS SETUP
+        // ═══════════════════════════════════════════════════════════════════════
+
+        let sun, ocean, mountains, trees;
+
+        function setup() {
+            let container = document.getElementById('canvas-container');
+            let canvas = createCanvas(container.offsetWidth, container.offsetHeight);
+            canvas.parent('canvas-container');
+
+            // 根据canvas宽度动态设置太阳位置
+            sun = { x: width * 0.85, y: height * 0.15, radius: 50 };
+
+            for (let i = 0; i < 4; i++) {
+                state.clouds.push(new Cloud(random(width * 0.3, width * 0.6), random(height * 0.15, height * 0.25)));
+            }
+
+            renderSteps();
+        }
+
+        function windowResized() {
+            let container = document.getElementById('canvas-container');
+            resizeCanvas(container.offsetWidth, container.offsetHeight);
+            sun = { x: width * 0.85, y: height * 0.15, radius: 50 };
+        }
+
+        function draw() {
+            drawSky();
+            drawSun();
+            drawMountains();
+            drawLandAndRiver();
+            drawOcean();
+
+            updateAndDrawParticles();
+            updateAndDrawClouds();
+            updateAndDrawRipples();
+
+            if (state.showFlow) drawFlowLines();
+
+            // 重点修改：交互特效
+            if (state.activeStep) {
+                drawFocusOverlay();
+                drawActiveStepEffects();
+            }
+
+            if (state.showLabels) drawLabels();
+        }
+
+        function drawSky() {
+            noFill();
+            let c1 = color(...CONFIG.colors.skyTop);
+            let c2 = color(...CONFIG.colors.skyBottom);
+
+            if (state.activeStep === 'precipitation') {
+                c1 = color(50, 50, 80);
+                c2 = color(100, 100, 120);
+            }
+
+            setGradient(0, 0, width, height, c1, c2);
+        }
+
+        function setGradient(x, y, w, h, c1, c2) {
+            for (let i = y; i <= y + h; i+=10) {
+                let inter = map(i, y, y + h, 0, 1);
+                let c = lerpColor(c1, c2, inter);
+                stroke(c);
+                strokeWeight(11);
+                line(x, i, x + w, i);
+            }
+        }
+
+        function drawSun() {
+            if (state.activeStep === 'precipitation') return;
+
+            let sizeMult = (state.activeStep === 'evaporation') ? 1.3 : 1.0;
+
+            drawingContext.shadowBlur = 40;
+            drawingContext.shadowColor = 'orange';
+            noStroke();
+            fill(...CONFIG.colors.sun);
+            circle(sun.x, sun.y, sun.radius * 2 * sizeMult);
+            drawingContext.shadowBlur = 0;
+        }
+
+        function drawMountains() {
+            noStroke();
+            fill(...CONFIG.colors.mountain);
+            beginShape();
+            vertex(0, height);
+            vertex(0, height * 0.5);
+            vertex(width * 0.25, height * 0.35);
+            bezierVertex(width*0.4, height*0.5, width*0.5, height*0.7, width*0.6, height*0.85);
+            vertex(width*0.6, height);
+            endShape(CLOSE);
+
+            // Snow cap
+            fill(255);
+            beginShape();
+            vertex(width*0.25, height*0.35);
+            vertex(width*0.18, height*0.45);
+            vertex(width*0.32, height*0.45);
+            endShape(CLOSE);
+        }
+
+        function drawLandAndRiver() {
+            fill(...CONFIG.colors.land);
+            rect(0, height*0.85, width, height*0.15);
+
+            fill(64, 164, 223);
+            beginShape();
+            vertex(width*0.45, height*0.65);
+            bezierVertex(width*0.5, height*0.7, width*0.55, height*0.8, width*0.7, height*0.85);
+            vertex(width*0.8, height*0.85);
+            vertex(width*0.8, height*0.88);
+            bezierVertex(width*0.6, height*0.88, width*0.55, height*0.75, width*0.48, height*0.65);
+            endShape();
+        }
+
+        function drawOcean() {
+            fill(...CONFIG.colors.ocean);
+            rect(width*0.6, height*0.85, width*0.4, height*0.15);
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // 粒子系统
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function updateAndDrawParticles() {
+            if (frameCount % 4 === 0) state.particles.push(new Particle('vapor'));
+            if (frameCount % 3 === 0) state.particles.push(new Particle('rain'));
+
+            for (let i = state.particles.length - 1; i >= 0; i--) {
+                let p = state.particles[i];
+                p.update();
+                p.draw();
+                if (p.isDead()) state.particles.splice(i, 1);
+            }
+        }
+
+        class Particle {
+            constructor(type) {
+                this.type = type;
+                this.life = 255;
+                if (type === 'vapor') {
+                    this.x = random(width * 0.65, width * 0.95);
+                    this.y = height * 0.85;
+                    this.vy = random(-1, -2);
+                    this.size = random(3, 6);
+                } else if (type === 'rain') {
+                    this.x = random(width * 0.2, width * 0.5);
+                    this.y = height * 0.35;
+                    this.vy = random(4, 7);
+                    this.vx = -0.5;
+                }
+            }
+
+            update() {
+                this.y += this.vy;
+                this.x += (this.vx || 0);
+
+                if (this.type === 'vapor') {
+                    this.life -= 1.5;
+                    this.x += sin(frameCount * 0.05 + this.y) * 0.5;
+                } else if (this.type === 'rain') {
+                    if (this.y > height * 0.8) {
+                        this.life = 0;
+                        state.ripples.push({x: this.x, y: this.y, r: 0, a: 200});
+                    }
+                }
+            }
+
+            draw() {
+                noStroke();
+                if (this.type === 'vapor') {
+                    fill(255, 255, 255, this.life * 0.5);
+                    circle(this.x, this.y, this.size);
+                } else {
+                    stroke(64, 164, 223, 150);
+                    strokeWeight(2);
+                    line(this.x, this.y, this.x + (this.vx||0)*2, this.y + 10);
+                }
+            }
+            isDead() { return this.life <= 0; }
+        }
+
+        function updateAndDrawRipples() {
+            noFill();
+            strokeWeight(2);
+            for(let i = state.ripples.length - 1; i >= 0; i--) {
+                let r = state.ripples[i];
+                stroke(64, 164, 223, r.a);
+                ellipse(r.x, r.y, r.r * 2, r.r * 0.6);
+                r.r += 1;
+                r.a -= 5;
+                if(r.a <= 0) state.ripples.splice(i, 1);
+            }
+        }
+
+        function drawFlowLines() {
+            drawFlowPath(width*0.8, height*0.85, width*0.8, height*0.25, -50, 'up');
+            drawFlowPath(width*0.75, height*0.2, width*0.3, height*0.25, 0, 'left');
+            drawFlowPath(width*0.25, height*0.3, width*0.35, height*0.6, 20, 'down');
+            drawFlowPath(width*0.4, height*0.7, width*0.75, height*0.88, 30, 'right');
+        }
+
+        function drawFlowPath(x1, y1, x2, y2, offset, type) {
+            let t = (millis() % 2000) / 2000;
+            let cx = (x1+x2)/2 + (type=='up'||type=='down'?offset:0);
+            let cy = (y1+y2)/2 + (type=='left'||type=='right'?offset:0);
+
+            noFill();
+            stroke(255, 255, 255, 100);
+            strokeWeight(2);
+            drawingContext.setLineDash([5, 10]);
+            bezier(x1, y1, cx, cy, cx, cy, x2, y2);
+            drawingContext.setLineDash([]);
+
+            let bx = bezierPoint(x1, cx, cx, x2, t);
+            let by = bezierPoint(y1, cy, cy, y2, t);
+            fill(41, 128, 185);
+            noStroke();
+            circle(bx, by, 8);
+        }
+
+        function drawLabels() {
+            textSize(14);
+            textStyle(BOLD);
+            textAlign(CENTER, CENTER);
+
+            const labels = [
+                {t: "Evaporation", x: width*0.85, y: height*0.65},
+                {t: "Condensation", x: width*0.5, y: height*0.15},
+                {t: "Precipitation", x: width*0.25, y: height*0.5},
+                {t: "Collection", x: width*0.6, y: height*0.92}
+            ];
+
+            labels.forEach(l => {
+                let opacity = state.activeStep ? 50 : 220;
+                if (state.activeStep && STEP_DEFINITIONS.find(s=>s.id === state.activeStep).name.includes(l.t)) {
+                    opacity = 255;
+                    fill(255, 255, 255);
+                    stroke(0);
+                } else {
+                    fill(255, 255, 255, opacity);
+                    noStroke();
+                }
+
+                rectMode(CENTER);
+                rect(l.x, l.y, textWidth(l.t)+20, 26, 13);
+                rectMode(CORNER);
+
+                fill(0, 0, 0, state.activeStep ? (opacity > 100 ? 255 : 50) : 200);
+                noStroke();
+                text(l.t, l.x, l.y + 1);
+            });
+        }
+
+
+        class Cloud {
+            constructor(x, y) {
+                this.origX = x;
+                this.origY = y;
+                this.scale = 1;
+            }
+            draw() {
+                let targetScale = (state.activeStep === 'condensation') ? 1.3 : 1.0;
+                this.scale = lerp(this.scale, targetScale, 0.1);
+
+                let isStorm = (state.activeStep === 'precipitation');
+                let baseColor = isStorm ? 80 : 255;
+
+                push();
+                translate(this.origX, this.origY);
+                scale(this.scale);
+
+                fill(baseColor, baseColor, baseColor, 230);
+                noStroke();
+                circle(0, 0, 50);
+                circle(-30, 10, 40);
+                circle(30, 10, 40);
+                circle(0, -20, 40);
+                pop();
+            }
+        }
+
+        function updateAndDrawClouds() {
+            state.clouds.forEach(c => c.draw());
+        }
+
+        // 震撼的交互特效函数从这里开始
+
+        function drawFocusOverlay() {
+            noStroke();
+            fill(0, 0, 0, 120);
+            rect(0, 0, width, height);
+
+            let step = STEP_DEFINITIONS.find(s => s.id === state.activeStep);
+            let targetX = width * step.focus.x;
+            let targetY = height * step.focus.y;
+
+            drawingContext.save();
+            let grad = drawingContext.createRadialGradient(targetX, targetY, 0, targetX, targetY, 250);
+            grad.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+            grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            drawingContext.fillStyle = grad;
+            drawingContext.beginPath();
+            drawingContext.arc(targetX, targetY, 350, 0, TWO_PI);
+            drawingContext.fill();
+            drawingContext.restore();
+
+            let pulse = (sin(frameCount * 0.1) + 1) * 0.5;
+            noFill();
+            stroke(255, 255, 255, 150 - pulse * 50);
+            strokeWeight(3);
+            circle(targetX, targetY, 120 + pulse * 40);
+        }
+
+        function drawActiveStepEffects() {
+            if (state.activeStep === 'evaporation') {
+                drawBigWavyArrow(width*0.75, height*0.85, height*0.4, 0);
+                drawBigWavyArrow(width*0.85, height*0.85, height*0.35, 20);
+                drawBigWavyArrow(width*0.95, height*0.85, height*0.4, 40);
+
+            } else if (state.activeStep === 'condensation') {
+                fill(255);
+                noStroke();
+                textSize(24);
+                textAlign(CENTER);
+                text("Gas → Liquid (Clouds)", width*0.5, height*0.12);
+
+            } else if (state.activeStep === 'precipitation') {
+                if (frameCount % 2 === 0) {
+                    let p = new Particle('rain');
+                    p.vx = -2;
+                    p.vy = random(10, 15);
+                    state.particles.push(p);
+                }
+
+                if (state.lightning.timer <= 0) {
+                    if (random(1) < 0.05) {
+                        state.lightning.active = true;
+                        state.lightning.timer = 15;
+                        state.lightning.x = random(width * 0.2, width * 0.45);
+                    }
+                } else {
+                    state.lightning.timer--;
+                }
+
+                if (state.lightning.timer > 0 && state.lightning.timer > 5) {
+                    drawLightningBolt(state.lightning.x, height * 0.2);
+                    background(255, 255, 255, 80);
+                }
+
+            } else if (state.activeStep === 'collection') {
+                noFill();
+                stroke(100, 200, 255);
+                strokeWeight(10);
+                strokeCap(ROUND);
+
+                drawingContext.setLineDash([30, 30]);
+                drawingContext.lineDashOffset = -frameCount * 3;
+                drawingContext.shadowBlur = 20;
+                drawingContext.shadowColor = '#4fc3f7';
+
+                beginShape();
+                vertex(width*0.45, height*0.65);
+                bezierVertex(width*0.5, height*0.7, width*0.55, height*0.8, width*0.7, height*0.85);
+                vertex(width*0.8, height*0.85);
+                endShape();
+
+                drawingContext.setLineDash([]);
+                drawingContext.shadowBlur = 0;
+            }
+        }
+
+        function drawBigWavyArrow(x, startY, endY, offset) {
+            let alpha = map(sin((frameCount + offset) * 0.05), -1, 1, 150, 255);
+            stroke(255, 100, 100, alpha);
+            strokeWeight(8);
+            noFill();
+
+            beginShape();
+            let moveY = (frameCount * 2 + offset) % (startY - endY);
+            let currentY = startY - moveY;
+
+            for(let i=0; i<=80; i+=5) {
+                let y = currentY + i;
+                if (y < startY && y > endY) {
+                    let xOff = sin(y * 0.05 + frameCount*0.1) * 12;
+                    vertex(x + xOff, y);
+                }
+            }
+            endShape();
+
+            // 箭头头部
+            if (currentY > endY) {
+                let headX = x + sin(currentY * 0.05 + frameCount*0.1) * 12;
+                push();
+                translate(headX, currentY);
+                fill(255, 100, 100, alpha);
+                noStroke();
+                triangle(-10, 0, 10, 0, 0, -15);
+                pop();
+            }
+        }
+
+        function drawLightningBolt(x, y) {
+            push();
+            stroke(255, 255, 0);
+            strokeWeight(4);
+            noFill();
+
+            drawingContext.shadowBlur = 30;
+            drawingContext.shadowColor = 'yellow';
+
+            beginShape();
+            vertex(x, y);
+
+            let currentX = x;
+            let currentY = y;
+            while(currentY < height * 0.7) {
+                let nextX = currentX + random(-40, 40);
+                let nextY = currentY + random(30, 60);
+                vertex(nextX, nextY);
+                currentX = nextX;
+                currentY = nextY;
+            }
+            endShape();
+
+            line(currentX, currentY, currentX - 20, currentY + 30);
+
+            pop();
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // UI FUNCTIONS
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function renderSteps() {
+            const container = document.getElementById('stepsContainer');
+
+            document.getElementById('stepsTitle').textContent = 'Water Cycle - 4 Stages';
+
+            container.innerHTML = STEP_DEFINITIONS.map((step, index) => `
+                <div class="step-card" onclick="activateStep('${step.id}')" id="step-${step.id}">
+                    <div class="step-header">
+                        <div class="step-number">${index + 1}</div>
+                        <div class="step-name">${step.name}</div>
+                    </div>
+                    <div class="step-desc">${step.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        function activateStep(stepId) {
+            document.querySelectorAll('.step-card').forEach(el => el.classList.remove('active'));
+
+            if (state.activeStep === stepId) {
+                state.activeStep = null;
+            } else {
+                document.getElementById('step-' + stepId).classList.add('active');
+                state.activeStep = stepId;
+
+                if(stepTimer) clearTimeout(stepTimer);
+                stepTimer = setTimeout(() => {
+                    state.activeStep = null;
+                    document.getElementById('step-' + stepId).classList.remove('active');
+                }, 4000);
+            }
+        }
+
+        function toggleProcess(process, element) {
+            if (process === 'labels') {
+                state.showLabels = !state.showLabels;
+            }
+            element.classList.toggle('active');
+        }
+
+        function toggleAnimation(element) {
+            // Animation toggle - demo.html doesn't have this, keep for compatibility
+            element.classList.toggle('active');
+        }
+
+        function downloadCanvas() {
+            saveCanvas('water-cycle-diagram', 'png');
+        }
+
+        function checkAnswer(answer) {
+            const result = document.getElementById('quizResult');
+            if (answer === 'condensation') {
+                result.className = 'quiz-result correct';
+                result.textContent = '✓ Correct! Water vapor condenses to form clouds.';
+            } else {
+                result.className = 'quiz-result incorrect';
+                result.textContent = '✗ Try again! Think about what happens when warm air rises and cools.';
+            }
+        }
+    </script>
+</body>
+</html>

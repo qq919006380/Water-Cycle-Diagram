@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Cycle Diagram - Interactive Learning</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <style>
+        /* 保持原有的布局样式，微调配色以匹配更高端的风格 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* 更柔和的背景渐变 */
+            background: linear-gradient(to bottom, #f0f4f8 0%, #d7e1ec 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header { padding: 30px 20px; text-align: center; }
+        .header h1 { color: #2c3e50; font-size: 32px; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .header p { color: #546e7a; font-size: 16px; font-weight: 400; }
+
+        .container {
+            flex: 1; display: flex; flex-direction: column; gap: 25px;
+            max-width: 1000px; margin: 0 auto; width: 100%; padding: 0 20px;
+        }
+
+        .canvas-area {
+            width: 100%;
+            height: 500px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            position: relative;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .controls-area { width: 100%; padding: 10px 0 40px; }
+
+        .steps-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px; margin-bottom: 30px;
+        }
+
+        .step-card {
+            background: #fff;
+            border: 1px solid #e1e8ed;
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-color: #3498db;
+        }
+
+        .step-card.active {
+            border: 2px solid #3498db;
+            background: #f0f7fc;
+        }
+
+        /* 增加一个小进度条效果 */
+        .step-card.active::after {
+            content: ''; position: absolute; bottom: 0; left: 0; height: 4px; width: 100%;
+            background: #3498db;
+        }
+
+        .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        
+        .step-number {
+            background: #eceff1; color: #546e7a;
+            width: 28px; height: 28px; border-radius: 50%;
+            text-align: center; line-height: 28px; font-size: 14px; font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-card.active .step-number { background: #3498db; color: white; }
+
+        .step-name { font-size: 16px; font-weight: 700; color: #2c3e50; }
+        .step-desc { font-size: 13px; color: #78909c; line-height: 1.5; }
+
+        .display-options { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+
+        .toggle-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid #cfd8dc;
+            border-radius: 50px;
+            font-size: 14px; font-weight: 600; color: #546e7a;
+            cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .toggle-btn:hover { background: #f7f9fa; color: #2c3e50; }
+        
+        .toggle-btn.active {
+            background: #2c3e50; color: white; border-color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            .canvas-area { height: 400px; }
+            .step-card { text-align: center; padding: 15px; }
+            .step-header { justify-content: center; margin-bottom: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>The Water Cycle</h1>
+        <p>Interactive Diagram: Explore how water moves through our planet</p>
+    </div>
+
+    <div class="container">
+        <div class="canvas-area">
+            <div id="canvas-container"></div>
+        </div>
+
+        <div class="controls-area">
+            <div class="steps-grid" id="stepsContainer"></div>
+
+            <div class="display-options">
+                <button class="toggle-btn active" onclick="toggleLabels(this)">
+                    <span>Labels</span>
+                </button>
+                <button class="toggle-btn active" onclick="toggleFlow(this)">
+                    <span>Flow Paths</span>
+                </button>
+                <button class="toggle-btn" onclick="downloadCanvas()">
+                    <span>Save Image</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+  <script>
+        // ═══════════════════════════════════════════════════════════════════════
+        // 1. 配置与状态
+        // ═══════════════════════════════════════════════════════════════════════
+        
+        const CONFIG = {
+            colors: {
+                skyTop: [135, 206, 235],
+                skyBottom: [230, 245, 255],
+                ocean: [64, 164, 223],
+                oceanDeep: [41, 128, 185],
+                mountain: [120, 144, 156],
+                land: [165, 214, 167],
+                sun: [255, 213, 79]
+            }
+        };
+
+        let state = {
+            showLabels: true,
+            showFlow: true,
+            activeStep: null,
+            particles: [],
+            clouds: [],
+            ripples: [],
+            // 闪电专用状态
+            lightning: {
+                active: false,
+                timer: 0,
+                x: 0
+            }
+        };
+
+        const STEPS = [
+            { id: 'evaporation', name: '1. Evaporation', desc: 'Sun heats water, turning it into rising vapor.', focus: {x: 0.8, y: 0.8} },
+            { id: 'condensation', name: '2. Condensation', desc: 'Vapor cools down to form clouds.', focus: {x: 0.5, y: 0.2} },
+            { id: 'precipitation', name: '3. Precipitation', desc: 'Clouds release water as rain or snow.', focus: {x: 0.3, y: 0.5} },
+            { id: 'collection', name: '4. Collection', desc: 'Water flows into rivers and oceans.', focus: {x: 0.6, y: 0.85} }
+        ];
+
+        let sun;
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // 2. P5.JS 生命周期
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function setup() {
+            let container = document.getElementById('canvas-container');
+            let c = createCanvas(container.offsetWidth, container.offsetHeight);
+            c.parent('canvas-container');
+            resetElements();
+            initClouds();
+            renderUI();
+        }
+
+        function windowResized() {
+            let container = document.getElementById('canvas-container');
+            resizeCanvas(container.offsetWidth, container.offsetHeight);
+            resetElements();
+        }
+
+        function resetElements() {
+            sun = { x: width * 0.85, y: height * 0.15, r: 50 };
+        }
+
+        function initClouds() {
+            state.clouds = [];
+            for(let i=0; i<4; i++) {
+                state.clouds.push(new Cloud(random(width*0.3, width*0.6), random(height*0.15, height*0.25)));
+            }
+        }
+
+        function draw() {
+            clear();
+            
+            drawSky();
+            drawSun();
+            drawMountains();
+            drawLandAndRiver();
+            drawOcean();
+            
+            updateAndDrawParticles();
+            updateAndDrawClouds();
+            updateAndDrawRipples();
+            
+            if (state.showFlow) drawFlowLines();
+            
+            // --- 重点修改：交互特效 ---
+            if (state.activeStep) {
+                drawFocusOverlay(); 
+                drawActiveStepEffects();
+            }
+
+            if (state.showLabels) drawLabels();
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // 3. 核心：强交互反馈特效 (导演模式)
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function drawFocusOverlay() {
+            // 全屏压暗
+            noStroke();
+            fill(0, 0, 0, 120); // 稍微再暗一点，对比度更高
+            rect(0, 0, width, height);
+
+            // 聚光灯逻辑
+            let step = STEPS.find(s => s.id === state.activeStep);
+            let targetX = width * step.focus.x;
+            let targetY = height * step.focus.y;
+            
+            drawingContext.save();
+            let grad = drawingContext.createRadialGradient(targetX, targetY, 0, targetX, targetY, 250);
+            grad.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+            grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            drawingContext.fillStyle = grad;
+            drawingContext.beginPath();
+            drawingContext.arc(targetX, targetY, 350, 0, TWO_PI);
+            drawingContext.fill();
+            drawingContext.restore();
+
+            // 脉冲光圈
+            let pulse = (sin(frameCount * 0.1) + 1) * 0.5;
+            noFill();
+            stroke(255, 255, 255, 150 - pulse * 50);
+            strokeWeight(3);
+            circle(targetX, targetY, 120 + pulse * 40);
+        }
+
+        function drawActiveStepEffects() {
+            
+            if (state.activeStep === 'evaporation') {
+                // 1. 蒸发：巨大的波浪箭头
+                drawBigWavyArrow(width*0.75, height*0.85, height*0.4, 0);
+                drawBigWavyArrow(width*0.85, height*0.85, height*0.35, 20);
+                drawBigWavyArrow(width*0.95, height*0.85, height*0.4, 40);
+                
+            } else if (state.activeStep === 'condensation') {
+                // 2. 凝结：云朵变大变文字
+                fill(255);
+                noStroke();
+                textSize(24);
+                textAlign(CENTER);
+                text("Gas → Liquid (Clouds)", width*0.5, height*0.12);
+                
+            } else if (state.activeStep === 'precipitation') {
+                // 3. 降水：【优化】真正的闪电 + 暴雨
+                
+                // A. 生成暴雨粒子 (加速生成)
+                if (frameCount % 2 === 0) { 
+                    let p = new Particle('rain');
+                    p.vx = -2; // 风大一点
+                    p.vy = random(10, 15); // 雨快一点
+                    state.particles.push(p);
+                }
+
+                // B. 闪电逻辑
+                // 每隔一段随机时间触发一次闪电
+                if (state.lightning.timer <= 0) {
+                    if (random(1) < 0.05) { // 5% 概率触发
+                        state.lightning.active = true;
+                        state.lightning.timer = 15; // 持续 15 帧
+                        state.lightning.x = random(width * 0.2, width * 0.45); // 在云层区域
+                    }
+                } else {
+                    state.lightning.timer--;
+                }
+
+                // C. 绘制闪电
+                if (state.lightning.timer > 0) {
+                    // 只有前几帧画闪电，营造那一瞬间的感觉
+                    if (state.lightning.timer > 5) {
+                        drawLightningBolt(state.lightning.x, height * 0.2);
+                        
+                        // 伴随闪电的背景微闪
+                        background(255, 255, 255, 80); 
+                    }
+                }
+
+            } else if (state.activeStep === 'collection') {
+                // 4. 汇集：发光的河流
+                noFill();
+                stroke(100, 200, 255);
+                strokeWeight(10);
+                strokeCap(ROUND);
+                
+                // 动态虚线
+                drawingContext.setLineDash([30, 30]);
+                drawingContext.lineDashOffset = -frameCount * 3;
+                
+                // 增加发光
+                drawingContext.shadowBlur = 20;
+                drawingContext.shadowColor = '#4fc3f7';
+
+                beginShape();
+                vertex(width*0.45, height*0.65); 
+                bezierVertex(width*0.5, height*0.7, width*0.55, height*0.8, width*0.7, height*0.85);
+                vertex(width*0.8, height*0.85);
+                endShape();
+                
+                drawingContext.setLineDash([]);
+                drawingContext.shadowBlur = 0; // 重置
+            }
+        }
+
+        // 【新增】绘制锯齿状闪电
+        function drawLightningBolt(x, y) {
+            push();
+            stroke(255, 255, 0); // 黄色
+            strokeWeight(4);
+            noFill();
+            
+            // 发光效果
+            drawingContext.shadowBlur = 30;
+            drawingContext.shadowColor = 'yellow';
+
+            beginShape();
+            vertex(x, y);
+            
+            let currentX = x;
+            let currentY = y;
+            // 生成随机 Z 字路径
+            while(currentY < height * 0.7) {
+                let nextX = currentX + random(-40, 40);
+                let nextY = currentY + random(30, 60);
+                vertex(nextX, nextY);
+                currentX = nextX;
+                currentY = nextY;
+            }
+            endShape();
+            
+            // 闪电末端的小分叉 (可选细节)
+            line(currentX, currentY, currentX - 20, currentY + 30);
+            
+            pop();
+        }
+
+        function drawBigWavyArrow(x, startY, endY, offset) {
+            let alpha = map(sin((frameCount + offset) * 0.05), -1, 1, 150, 255);
+            stroke(255, 100, 100, alpha);
+            strokeWeight(8); // 更粗
+            noFill();
+            
+            beginShape();
+            let moveY = (frameCount * 2 + offset) % (startY - endY);
+            let currentY = startY - moveY;
+            
+            for(let i=0; i<=80; i+=5) {
+                let y = currentY + i;
+                if (y < startY && y > endY) {
+                    let xOff = sin(y * 0.05 + frameCount*0.1) * 12;
+                    vertex(x + xOff, y);
+                }
+            }
+            endShape();
+            
+            // 箭头头部
+            if (currentY > endY) {
+                 let headX = x + sin(currentY * 0.05 + frameCount*0.1) * 12;
+                 push();
+                 translate(headX, currentY);
+                 fill(255, 100, 100, alpha);
+                 noStroke();
+                 triangle(-10, 0, 10, 0, 0, -15);
+                 pop();
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // 4. 场景绘制函数
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function drawSky() {
+            noFill();
+            let c1 = color(...CONFIG.colors.skyTop);
+            let c2 = color(...CONFIG.colors.skyBottom);
+            
+            // 如果是降水步骤，天空变暗
+            if (state.activeStep === 'precipitation') {
+                c1 = color(50, 50, 80); // 暗紫色
+                c2 = color(100, 100, 120);
+            }
+
+            setGradient(0, 0, width, height, c1, c2);
+        }
+
+        function setGradient(x, y, w, h, c1, c2) {
+            for (let i = y; i <= y + h; i+=10) {
+                let inter = map(i, y, y + h, 0, 1);
+                let c = lerpColor(c1, c2, inter);
+                stroke(c);
+                strokeWeight(11);
+                line(x, i, x + w, i);
+            }
+        }
+
+        function drawSun() {
+            let sizeMult = (state.activeStep === 'evaporation') ? 1.3 : 1.0;
+            
+            // 如果是降水/闪电，太阳隐藏或变暗
+            if (state.activeStep === 'precipitation') return;
+
+            drawingContext.shadowBlur = 40;
+            drawingContext.shadowColor = 'orange';
+            noStroke();
+            fill(...CONFIG.colors.sun);
+            circle(sun.x, sun.y, sun.r * 2 * sizeMult);
+            drawingContext.shadowBlur = 0;
+        }
+
+        function drawMountains() {
+            noStroke();
+            fill(...CONFIG.colors.mountain);
+            beginShape();
+            vertex(0, height);
+            vertex(0, height * 0.5);
+            vertex(width * 0.25, height * 0.35);
+            bezierVertex(width*0.4, height*0.5, width*0.5, height*0.7, width*0.6, height*0.85);
+            vertex(width*0.6, height);
+            endShape(CLOSE);
+
+            // Snow cap
+            fill(255);
+            beginShape();
+            vertex(width*0.25, height*0.35);
+            vertex(width*0.18, height*0.45);
+            vertex(width*0.32, height*0.45);
+            endShape(CLOSE);
+        }
+
+        function drawLandAndRiver() {
+            fill(...CONFIG.colors.land);
+            rect(0, height*0.85, width, height*0.15);
+
+            fill(64, 164, 223);
+            beginShape();
+            vertex(width*0.45, height*0.65);
+            bezierVertex(width*0.5, height*0.7, width*0.55, height*0.8, width*0.7, height*0.85);
+            vertex(width*0.8, height*0.85);
+            vertex(width*0.8, height*0.88);
+            bezierVertex(width*0.6, height*0.88, width*0.55, height*0.75, width*0.48, height*0.65);
+            endShape();
+        }
+
+        function drawOcean() {
+            fill(...CONFIG.colors.ocean);
+            rect(width*0.6, height*0.85, width*0.4, height*0.15);
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // 5. 粒子系统
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function updateAndDrawParticles() {
+            if (frameCount % 4 === 0) state.particles.push(new Particle('vapor'));
+            if (frameCount % 3 === 0) state.particles.push(new Particle('rain'));
+
+            for (let i = state.particles.length - 1; i >= 0; i--) {
+                let p = state.particles[i];
+                p.update();
+                p.draw();
+                if (p.isDead()) state.particles.splice(i, 1);
+            }
+        }
+
+        class Particle {
+            constructor(type) {
+                this.type = type;
+                this.life = 255;
+                if (type === 'vapor') {
+                    this.x = random(width * 0.65, width * 0.95);
+                    this.y = height * 0.85;
+                    this.vy = random(-1, -2);
+                    this.size = random(3, 6);
+                } else if (type === 'rain') {
+                    this.x = random(width * 0.2, width * 0.5);
+                    this.y = height * 0.35;
+                    this.vy = random(4, 7);
+                    this.vx = -0.5; // 轻微的风
+                }
+            }
+
+            update() {
+                this.y += this.vy;
+                this.x += (this.vx || 0);
+                
+                if (this.type === 'vapor') {
+                    this.life -= 1.5;
+                    this.x += sin(frameCount * 0.05 + this.y) * 0.5;
+                } else if (this.type === 'rain') {
+                    if (this.y > height * 0.8) { 
+                        this.life = 0;
+                        state.ripples.push({x: this.x, y: this.y, r: 0, a: 200});
+                    }
+                }
+            }
+
+            draw() {
+                noStroke();
+                if (this.type === 'vapor') {
+                    fill(255, 255, 255, this.life * 0.5);
+                    circle(this.x, this.y, this.size);
+                } else {
+                    stroke(64, 164, 223, 150);
+                    strokeWeight(2);
+                    line(this.x, this.y, this.x + (this.vx||0)*2, this.y + 10);
+                }
+            }
+            isDead() { return this.life <= 0; }
+        }
+
+        function updateAndDrawRipples() {
+            noFill();
+            strokeWeight(2);
+            for(let i = state.ripples.length - 1; i >= 0; i--) {
+                let r = state.ripples[i];
+                stroke(64, 164, 223, r.a);
+                ellipse(r.x, r.y, r.r * 2, r.r * 0.6);
+                r.r += 1;
+                r.a -= 5;
+                if(r.a <= 0) state.ripples.splice(i, 1);
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // 6. 云朵逻辑 (积雨云变化)
+        // ═══════════════════════════════════════════════════════════════════════
+
+        class Cloud {
+            constructor(x, y) {
+                this.origX = x; 
+                this.origY = y;
+                this.scale = 1;
+            }
+            draw() {
+                // 凝结时变大
+                let targetScale = (state.activeStep === 'condensation') ? 1.3 : 1.0;
+                this.scale = lerp(this.scale, targetScale, 0.1);
+                
+                // 降水时变黑 (Storm Mode)
+                let isStorm = (state.activeStep === 'precipitation');
+                let baseColor = isStorm ? 80 : 255; // 变深灰
+                
+                push();
+                translate(this.origX, this.origY);
+                scale(this.scale);
+                
+                fill(baseColor, baseColor, baseColor, 230);
+                noStroke();
+                circle(0, 0, 50);
+                circle(-30, 10, 40);
+                circle(30, 10, 40);
+                circle(0, -20, 40);
+                pop();
+            }
+        }
+
+        function updateAndDrawClouds() {
+            state.clouds.forEach(c => c.draw());
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // 7. 辅助线 (Flow)
+        // ═══════════════════════════════════════════════════════════════════════
+        
+        function drawFlowLines() {
+            drawFlowPath(width*0.8, height*0.85, width*0.8, height*0.25, -50, 'up');
+            drawFlowPath(width*0.75, height*0.2, width*0.3, height*0.25, 0, 'left');
+            drawFlowPath(width*0.25, height*0.3, width*0.35, height*0.6, 20, 'down');
+            drawFlowPath(width*0.4, height*0.7, width*0.75, height*0.88, 30, 'right');
+        }
+
+        function drawFlowPath(x1, y1, x2, y2, offset, type) {
+            let t = (millis() % 2000) / 2000;
+            let cx = (x1+x2)/2 + (type=='up'||type=='down'?offset:0);
+            let cy = (y1+y2)/2 + (type=='left'||type=='right'?offset:0);
+
+            noFill();
+            stroke(255, 255, 255, 100);
+            strokeWeight(2);
+            drawingContext.setLineDash([5, 10]);
+            bezier(x1, y1, cx, cy, cx, cy, x2, y2);
+            drawingContext.setLineDash([]);
+
+            let bx = bezierPoint(x1, cx, cx, x2, t);
+            let by = bezierPoint(y1, cy, cy, y2, t);
+            fill(41, 128, 185);
+            noStroke();
+            circle(bx, by, 8);
+        }
+
+        function drawLabels() {
+            textSize(14);
+            textStyle(BOLD);
+            textAlign(CENTER, CENTER);
+            
+            const labels = [
+                {t: "Evaporation", x: width*0.85, y: height*0.65},
+                {t: "Condensation", x: width*0.5, y: height*0.15},
+                {t: "Precipitation", x: width*0.25, y: height*0.5},
+                {t: "Collection", x: width*0.6, y: height*0.92}
+            ];
+
+            labels.forEach(l => {
+                let opacity = state.activeStep ? 50 : 220; 
+                if (state.activeStep && STEPS.find(s=>s.id === state.activeStep).name.includes(l.t)) {
+                    opacity = 255;
+                    fill(255, 255, 255);
+                    stroke(0);
+                } else {
+                    fill(255, 255, 255, opacity);
+                    noStroke();
+                }
+                
+                rectMode(CENTER);
+                rect(l.x, l.y, textWidth(l.t)+20, 26, 13);
+                rectMode(CORNER);
+                
+                fill(0, 0, 0, state.activeStep ? (opacity > 100 ? 255 : 50) : 200);
+                noStroke();
+                text(l.t, l.x, l.y + 1);
+            });
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // 8. UI 交互
+        // ═══════════════════════════════════════════════════════════════════════
+
+        function renderUI() {
+            const container = document.getElementById('stepsContainer');
+            container.innerHTML = STEPS.map((step, i) => `
+                <div class="step-card" onclick="activateStep('${step.id}')" id="btn-${step.id}">
+                    <div class="step-header">
+                        <div class="step-number">${i+1}</div>
+                        <div class="step-name">${step.name.split('. ')[1]}</div>
+                    </div>
+                    <div class="step-desc">${step.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        function activateStep(stepId) {
+            document.querySelectorAll('.step-card').forEach(el => el.classList.remove('active'));
+            
+            if (state.activeStep === stepId) {
+                state.activeStep = null;
+            } else {
+                document.getElementById(`btn-${stepId}`).classList.add('active');
+                state.activeStep = stepId;
+                
+                if(state.timer) clearTimeout(state.timer);
+                state.timer = setTimeout(() => {
+                    state.activeStep = null;
+                    document.getElementById(`btn-${stepId}`).classList.remove('active');
+                }, 4000);
+            }
+        }
+
+        function toggleLabels(btn) {
+            state.showLabels = !state.showLabels;
+            btn.classList.toggle('active');
+        }
+
+        function toggleFlow(btn) {
+            state.showFlow = !state.showFlow;
+            btn.classList.toggle('active');
+        }
+
+        function downloadCanvas() {
+            saveCanvas('water-cycle-diagram', 'png');
+        }
+    </script>
+</body>
+</html>
