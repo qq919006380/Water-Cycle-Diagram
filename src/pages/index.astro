@@ -1,23 +1,47 @@
 ---
 // Water Cycle Diagram - Interactive Educational Tool
-// 首页：组合各个组件展示水循环动画和教育内容
+// Homepage: Canvas + Controls + Quiz + SEO Content (all inline, no unnecessary component splits)
 
 import Layout from '@/layouts/Layout.astro';
 import Container from '@/components/container.astro';
 import WaterCycleCanvas from '@/components/water-cycle/WaterCycleCanvas.astro';
-import StepCards from '@/components/water-cycle/StepCards.astro';
-import DisplayOptions from '@/components/water-cycle/DisplayOptions.astro';
-import Quiz from '@/components/water-cycle/Quiz.astro';
-import SEOContent from '@/components/water-cycle/SEOContent.astro';
+import { STEP_DEFINITIONS } from '@/lib/water-cycle/config';
+
+// Quiz data
+const QUIZ_DATA = [
+  {
+    question: 'In the water cycle diagram, what happens when water vapor cools in the atmosphere?',
+    options: [
+      'It forms clouds (Condensation)',
+      'It falls as rain immediately',
+      'It evaporates more',
+    ],
+    correctAnswer: 0,
+  },
+  {
+    question: 'Which stage of the water cycle diagram shows water falling from clouds?',
+    options: ['Evaporation', 'Precipitation', 'Collection'],
+    correctAnswer: 1,
+  },
+  {
+    question: 'Looking at a water cycle diagram, where does most evaporation occur?',
+    options: ['Rivers and lakes', 'Oceans and seas', 'Mountains'],
+    correctAnswer: 1,
+  },
+];
 ---
 
-<Layout title="Interactive 4 Stages Animation | Free Learning Tool" bodyClass="homepage-bg">
+<Layout
+  title="Interactive 4 Stages Animation & Free Learning Tool"
+  description="Interactive water cycle diagram with animated 4 stages: evaporation, condensation, precipitation & collection. Free educational tool with quiz for students K-12."
+  bodyClass="homepage-bg"
+>
   <!-- Hero Section -->
   <Container>
     <header class="hero-section">
-      <h1>Water Cycle Diagram</h1>
+      <h1>Water Cycle Diagram: Interactive 4 Stages Animation</h1>
       <p>
-        Learn the 4 stages of water cycle with interactive animation and clear explanations
+        Explore our free water cycle diagram with animated stages. Click evaporation, condensation, precipitation, and collection to see each process in action. This interactive water cycle diagram is perfect for students ages 8-14.
       </p>
     </header>
   </Container>
@@ -27,24 +51,194 @@ import SEOContent from '@/components/water-cycle/SEOContent.astro';
     <WaterCycleCanvas />
   </Container>
 
-  <!-- Controls Area -->
+  <!-- Step Cards + Display Options (inline) -->
   <Container>
-    <div class="controls-section">
-      <StepCards />
-      <DisplayOptions />
-    </div>
+    <section class="controls-section">
+      <h2 class="steps-title">Water Cycle Diagram - 4 Stages Explained</h2>
+      <div class="steps-grid">
+        {STEP_DEFINITIONS.map((step, index) => (
+          <button class="step-card" data-step-id={step.id} type="button">
+            <div class="step-header">
+              <div class="step-number">{index + 1}</div>
+              <div class="step-name">{step.name}</div>
+            </div>
+            <div class="step-desc">{step.desc}</div>
+          </button>
+        ))}
+      </div>
+
+      <div class="display-options">
+        <div class="toggle-option">
+          <label>Show Labels</label>
+          <button class="toggle-switch active" id="toggleLabels" type="button" aria-pressed="true">
+            <span class="sr-only">Toggle labels</span>
+          </button>
+        </div>
+        <div class="toggle-option">
+          <label>Flow Paths</label>
+          <button class="toggle-switch active" id="toggleFlow" type="button" aria-pressed="true">
+            <span class="sr-only">Toggle flow paths</span>
+          </button>
+        </div>
+        <button class="download-btn" id="downloadBtn" type="button">
+          Download Water Cycle Diagram
+        </button>
+      </div>
+    </section>
   </Container>
 
-  <!-- Quiz Section -->
+  <!-- Quiz Section (all questions visible, single submit) -->
   <Container>
-    <Quiz />
+    <section class="quiz-section">
+      <h2>Test Your Water Cycle Diagram Knowledge</h2>
+      <form id="quizForm" class="quiz-form">
+        {QUIZ_DATA.map((quiz, quizIndex) => (
+          <div class="quiz-question-block" data-correct={quiz.correctAnswer}>
+            <p class="quiz-question-text">
+              {quizIndex + 1}. {quiz.question}
+            </p>
+            <div class="quiz-options">
+              {quiz.options.map((option, optionIndex) => (
+                <label class="quiz-option">
+                  <input type="radio" name={`q${quizIndex}`} value={optionIndex} required />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+        <button type="submit" class="submit-btn">Submit Answers</button>
+      </form>
+      <div id="quizResult" class="quiz-result"></div>
+    </section>
   </Container>
 
-  <!-- SEO Content Section -->
+  <!-- SEO Content Section (inline with keyword optimization) -->
   <Container>
-    <SEOContent />
+    <section class="seo-section">
+      <div class="seo-container">
+        <div class="seo-column">
+          <h3>Water Cycle Diagram FAQ</h3>
+          <div class="faq-item">
+            <div class="faq-question">What are the 4 stages shown in a water cycle diagram?</div>
+            <div class="faq-answer">
+              A water cycle diagram illustrates four stages: Evaporation (water turns to vapor), Condensation (vapor forms clouds), Precipitation (water falls as rain/snow), and Collection (water gathers in oceans, lakes, rivers).
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">How do I read a water cycle diagram?</div>
+            <div class="faq-answer">
+              Follow the arrows in any water cycle diagram - they show water's continuous journey from oceans (evaporation) to sky (condensation) to earth (precipitation) and back to water bodies (collection).
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Why is the water cycle diagram important for students?</div>
+            <div class="faq-answer">
+              A water cycle diagram helps students visualize how Earth recycles water. This process sustains all life and has been running for over 4 billion years - the same water dinosaurs drank!
+            </div>
+          </div>
+        </div>
+
+        <div class="seo-column">
+          <h3>Water Cycle Diagram Facts</h3>
+          <ul>
+            <li>Earth's water cycle diagram shows a process 4 billion years old</li>
+            <li>97% of water in any water cycle diagram starts in oceans</li>
+            <li>Only 3% is freshwater, mostly frozen in glaciers</li>
+            <li>A single water drop can spend 3,000 years in the ocean</li>
+            <li>Plants contribute 10% of atmospheric water through transpiration</li>
+            <li>The water cycle diagram shows nature's perfect recycling system</li>
+          </ul>
+        </div>
+
+        <div class="seo-column">
+          <h3>Understanding the Water Cycle Diagram</h3>
+          <p>
+            Our interactive water cycle diagram shows nature's water recycling system. The sun heats ocean water, creating vapor that rises (evaporation). As vapor cools high in the atmosphere, it forms clouds (condensation). When clouds become heavy, water falls as rain or snow (precipitation). Finally, water flows back to oceans and lakes (collection), completing what every water cycle diagram illustrates - an endless loop sustaining life on Earth.
+          </p>
+          <p style="margin-top: 16px;">
+            This water cycle diagram animation lets you click each stage to see detailed effects. Use it for homework, classroom presentations, or self-study. Download the water cycle diagram image for your projects!
+          </p>
+        </div>
+      </div>
+    </section>
   </Container>
 </Layout>
+
+<script>
+  // Step Cards interaction
+  document.querySelectorAll('.step-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const stepId = (card as HTMLElement).dataset.stepId;
+      document.dispatchEvent(
+        new CustomEvent('water-cycle:set-step', { detail: { stepId } })
+      );
+    });
+  });
+
+  document.addEventListener('water-cycle:step-changed', ((e: CustomEvent) => {
+    const activeStepId = e.detail.stepId;
+    document.querySelectorAll('.step-card').forEach((card) => {
+      const cardStepId = (card as HTMLElement).dataset.stepId;
+      card.classList.toggle('active', cardStepId === activeStepId);
+    });
+  }) as EventListener);
+
+  // Display Options
+  const toggleLabels = document.getElementById('toggleLabels');
+  const toggleFlow = document.getElementById('toggleFlow');
+  const downloadBtn = document.getElementById('downloadBtn');
+
+  toggleLabels?.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('water-cycle:toggle-labels'));
+  });
+
+  toggleFlow?.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('water-cycle:toggle-flow'));
+  });
+
+  downloadBtn?.addEventListener('click', () => {
+    document.dispatchEvent(new CustomEvent('water-cycle:download'));
+  });
+
+  document.addEventListener('water-cycle:labels-changed', ((e: CustomEvent) => {
+    toggleLabels?.classList.toggle('active', e.detail.value);
+    toggleLabels?.setAttribute('aria-pressed', String(e.detail.value));
+  }) as EventListener);
+
+  document.addEventListener('water-cycle:flow-changed', ((e: CustomEvent) => {
+    toggleFlow?.classList.toggle('active', e.detail.value);
+    toggleFlow?.setAttribute('aria-pressed', String(e.detail.value));
+  }) as EventListener);
+
+  // Quiz - all questions visible, single submit
+  const quizForm = document.getElementById('quizForm') as HTMLFormElement;
+  const quizResult = document.getElementById('quizResult');
+
+  quizForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(quizForm);
+    const blocks = document.querySelectorAll('.quiz-question-block');
+    let correct = 0;
+
+    blocks.forEach((block, index) => {
+      const correctAnswer = parseInt((block as HTMLElement).dataset.correct || '0');
+      const userAnswer = parseInt(formData.get(`q${index}`) as string);
+      if (userAnswer === correctAnswer) correct++;
+    });
+
+    if (quizResult) {
+      const total = blocks.length;
+      if (correct === total) {
+        quizResult.className = 'quiz-result success';
+        quizResult.innerHTML = `<strong>Perfect!</strong> You got all ${total} questions correct. You understand the water cycle diagram!`;
+      } else {
+        quizResult.className = 'quiz-result partial';
+        quizResult.innerHTML = `You got <strong>${correct}/${total}</strong> correct. Review the water cycle diagram and try again!`;
+      }
+    }
+  });
+</script>
 
 <style is:global>
   .homepage-bg {
@@ -54,6 +248,7 @@ import SEOContent from '@/components/water-cycle/SEOContent.astro';
 </style>
 
 <style>
+  /* Hero */
   .hero-section {
     text-align: center;
     padding: 2rem 0;
@@ -69,16 +264,438 @@ import SEOContent from '@/components/water-cycle/SEOContent.astro';
   .hero-section p {
     font-size: 1.125rem;
     color: #4b5563;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.7;
   }
 
+  /* Controls Section */
   .controls-section {
     max-width: 1000px;
     margin: 0 auto;
+    padding: 30px 0;
   }
 
+  .steps-title {
+    color: #000;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .step-card {
+    background: #fff;
+    border: 1px solid #e1e8ed;
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    font-family: inherit;
+  }
+
+  .step-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border-color: #3498db;
+  }
+
+  .step-card.active {
+    border: 2px solid #3498db;
+    background: #f0f7fc;
+  }
+
+  .step-card.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    width: 100%;
+    background: #3498db;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .step-number {
+    background: #eceff1;
+    color: #546e7a;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 28px;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .step-card.active .step-number {
+    background: #3498db;
+    color: white;
+  }
+
+  .step-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: #78909c;
+    line-height: 1.5;
+  }
+
+  /* Display Options */
+  .display-options {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .toggle-option {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background: transparent;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    gap: 15px;
+  }
+
+  .toggle-option label {
+    font-size: 14px;
+    color: #000;
+    font-weight: 500;
+  }
+
+  .toggle-switch {
+    width: 50px;
+    height: 26px;
+    background: #e5e5e5;
+    border-radius: 13px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: none;
+  }
+
+  .toggle-switch.active {
+    background: #000;
+  }
+
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: white;
+    top: 2px;
+    left: 2px;
+    transition: left 0.2s;
+  }
+
+  .toggle-switch.active::after {
+    left: 26px;
+  }
+
+  .download-btn {
+    padding: 10px 15px;
+    background: transparent;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #000;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .download-btn:hover {
+    background: #f5f5f5;
+    border-color: #000;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  /* Quiz Section */
+  .quiz-section {
+    padding: 50px 0;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .quiz-section h2 {
+    color: #000;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .quiz-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .quiz-question-block {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .quiz-question-text {
+    color: #333;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .quiz-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 15px;
+    color: #333;
+  }
+
+  .quiz-option:hover {
+    border-color: #000;
+    background: #fafafa;
+  }
+
+  .quiz-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #000;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: #000;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .quiz-result {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 16px;
+    text-align: center;
+    display: none;
+  }
+
+  .quiz-result.success {
+    display: block;
+    background: #d4edda;
+    border: 2px solid #28a745;
+    color: #155724;
+  }
+
+  .quiz-result.partial {
+    display: block;
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    color: #856404;
+  }
+
+  /* SEO Section */
+  .seo-section {
+    padding: 60px 0;
+  }
+
+  .seo-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .seo-column h3 {
+    color: #000;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .faq-item {
+    margin-bottom: 20px;
+  }
+
+  .faq-question {
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+
+  .faq-answer {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .seo-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .seo-column ul li {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .seo-column ul li::before {
+    content: '\2022';
+    position: absolute;
+    left: 0;
+    color: #000;
+    font-weight: bold;
+  }
+
+  .seo-column p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  /* Responsive */
   @media (min-width: 768px) {
     .hero-section h1 {
       font-size: 2.5rem;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .steps-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .steps-title {
+      font-size: 20px;
+    }
+
+    .steps-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .display-options {
+      flex-direction: column;
+      gap: 15px;
+      align-items: stretch;
+    }
+
+    .toggle-option,
+    .download-btn {
+      justify-content: center;
+    }
+
+    .seo-container {
+      grid-template-columns: 1fr;
+      gap: 35px;
+    }
+
+    .quiz-section h2 {
+      font-size: 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .steps-title {
+      font-size: 18px;
+    }
+
+    .controls-section {
+      padding: 20px 0;
+    }
+
+    .step-card {
+      padding: 12px;
+    }
+
+    .step-name {
+      font-size: 14px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+    }
+
+    .quiz-section h2 {
+      font-size: 22px;
+    }
+
+    .quiz-question-text {
+      font-size: 15px;
+    }
+
+    .quiz-option {
+      font-size: 14px;
+      padding: 12px 16px;
     }
   }
 </style>
