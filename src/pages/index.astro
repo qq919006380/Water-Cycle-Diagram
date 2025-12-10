@@ -1,0 +1,84 @@
+---
+// Water Cycle Diagram - Interactive Educational Tool
+// 首页：组合各个组件展示水循环动画和教育内容
+
+import Layout from '@/layouts/Layout.astro';
+import Container from '@/components/container.astro';
+import WaterCycleCanvas from '@/components/water-cycle/WaterCycleCanvas.astro';
+import StepCards from '@/components/water-cycle/StepCards.astro';
+import DisplayOptions from '@/components/water-cycle/DisplayOptions.astro';
+import Quiz from '@/components/water-cycle/Quiz.astro';
+import SEOContent from '@/components/water-cycle/SEOContent.astro';
+---
+
+<Layout title="Interactive 4 Stages Animation | Free Learning Tool" bodyClass="homepage-bg">
+  <!-- Hero Section -->
+  <Container>
+    <header class="hero-section">
+      <h1>Water Cycle Diagram</h1>
+      <p>
+        Learn the 4 stages of water cycle with interactive animation and clear explanations
+      </p>
+    </header>
+  </Container>
+
+  <!-- Canvas Area -->
+  <Container>
+    <WaterCycleCanvas />
+  </Container>
+
+  <!-- Controls Area -->
+  <Container>
+    <div class="controls-section">
+      <StepCards />
+      <DisplayOptions />
+    </div>
+  </Container>
+
+  <!-- Quiz Section -->
+  <Container>
+    <Quiz />
+  </Container>
+
+  <!-- SEO Content Section -->
+  <Container>
+    <SEOContent />
+  </Container>
+</Layout>
+
+<style is:global>
+  .homepage-bg {
+    background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 50%, #90ee90 100%);
+    min-height: 100vh;
+  }
+</style>
+
+<style>
+  .hero-section {
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  .hero-section h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1rem;
+  }
+
+  .hero-section p {
+    font-size: 1.125rem;
+    color: #4b5563;
+  }
+
+  .controls-section {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .hero-section h1 {
+      font-size: 2.5rem;
+    }
+  }
+</style>

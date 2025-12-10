@@ -1,0 +1,210 @@
+---
+// Water Cycle Canvas Component
+// 负责渲染p5.js画布和初始化动画
+---
+
+<div class="canvas-wrapper">
+  <div class="canvas-area">
+    <div id="canvas-container"></div>
+  </div>
+</div>
+
+<script>
+  import p5 from 'p5';
+  import { CONFIG, STEP_DEFINITIONS } from '@/lib/water-cycle/config';
+  import { createInitialState, initializeClouds } from '@/lib/water-cycle/state';
+  import {
+    createVaporParticle,
+    createRainParticle,
+    updateParticleSystem,
+    drawParticle,
+    drawRipple,
+  } from '@/lib/water-cycle/particles';
+  import {
+    drawSky,
+    drawSun,
+    drawMountains,
+    drawLandAndRiver,
+    drawOcean,
+    drawCloud,
+    drawFlowLines,
+    drawLabels,
+    drawFocusOverlay,
+  } from '@/lib/water-cycle/drawing';
+  import { drawActiveStepEffects } from '@/lib/water-cycle/effects';
+  import type { WaterCycleState, Sun } from '@/lib/water-cycle/types';
+  import type { StepId } from '@/lib/water-cycle/config';
+
+  // p5实例模式sketch
+  const sketch = (p: p5) => {
+    let state: WaterCycleState;
+    let sun: Sun;
+    let stepTimer: ReturnType<typeof setTimeout> | null = null;
+
+    p.setup = () => {
+      const container = document.getElementById('canvas-container');
+      if (!container) return;
+
+      const canvas = p.createCanvas(container.offsetWidth, container.offsetHeight);
+      canvas.parent('canvas-container');
+
+      // 初始化状态
+      state = createInitialState();
+      sun = {
+        x: p.width * CONFIG.sun.positionX,
+        y: p.height * CONFIG.sun.positionY,
+        radius: CONFIG.sun.radius,
+      };
+
+      // 初始化云朵
+      initializeClouds(state, p.width, p.height, p.random.bind(p));
+
+      // 暴露API到window供其他组件调用
+      (window as any).__waterCycleApi = {
+        setActiveStep: (stepId: StepId | null) => {
+          if (state.activeStep === stepId) {
+            state.activeStep = null;
+          } else {
+            state.activeStep = stepId;
+            if (stepTimer) clearTimeout(stepTimer);
+            stepTimer = setTimeout(() => {
+              state.activeStep = null;
+              document.dispatchEvent(new CustomEvent('water-cycle:step-changed', { detail: { stepId: null } }));
+            }, CONFIG.stepHighlightDuration);
+          }
+          document.dispatchEvent(new CustomEvent('water-cycle:step-changed', { detail: { stepId: state.activeStep } }));
+        },
+
+        toggleLabels: () => {
+          state.showLabels = !state.showLabels;
+          return state.showLabels;
+        },
+
+        toggleFlow: () => {
+          state.showFlow = !state.showFlow;
+          return state.showFlow;
+        },
+
+        downloadImage: () => {
+          p.saveCanvas('water-cycle-diagram', 'png');
+        },
+
+        getState: () => state,
+      };
+    };
+
+    p.windowResized = () => {
+      const container = document.getElementById('canvas-container');
+      if (!container) return;
+
+      p.resizeCanvas(container.offsetWidth, container.offsetHeight);
+      sun = {
+        x: p.width * CONFIG.sun.positionX,
+        y: p.height * CONFIG.sun.positionY,
+        radius: CONFIG.sun.radius,
+      };
+    };
+
+    p.draw = () => {
+      if (!state) return;
+
+      // 背景层
+      drawSky(p, p.width, p.height, state.activeStep);
+      drawSun(p, sun, state.activeStep);
+      drawMountains(p, p.width, p.height);
+      drawLandAndRiver(p, p.width, p.height);
+      drawOcean(p, p.width, p.height);
+
+      // 粒子生成
+      if (p.frameCount % CONFIG.particles.vapor.spawnInterval === 0) {
+        state.particles.push(createVaporParticle(p.width, p.height, p.random.bind(p)));
+      }
+      if (p.frameCount % CONFIG.particles.rain.spawnInterval === 0) {
+        state.particles.push(createRainParticle(p.width, p.height, p.random.bind(p)));
+      }
+
+      // 粒子更新和绘制
+      updateParticleSystem(state, p.height, p.frameCount, p.sin.bind(p));
+      state.particles.forEach((particle) => drawParticle(p, particle));
+      state.ripples.forEach((ripple) => drawRipple(p, ripple));
+
+      // 云朵
+      state.clouds.forEach((cloud) => drawCloud(p, cloud, state.activeStep));
+
+      // 流动线条
+      if (state.showFlow) {
+        drawFlowLines(p, p.width, p.height);
+      }
+
+      // 活动阶段效果
+      if (state.activeStep) {
+        drawFocusOverlay(p, p.width, p.height, state.activeStep);
+        drawActiveStepEffects(p, state, p.width, p.height);
+      }
+
+      // 标签
+      if (state.showLabels) {
+        drawLabels(p, p.width, p.height, state.activeStep);
+      }
+    };
+  };
+
+  // 初始化
+  document.addEventListener('DOMContentLoaded', () => {
+    new p5(sketch);
+
+    // 监听来自其他组件的事件
+    document.addEventListener('water-cycle:set-step', ((e: CustomEvent) => {
+      const api = (window as any).__waterCycleApi;
+      api?.setActiveStep(e.detail.stepId);
+    }) as EventListener);
+
+    document.addEventListener('water-cycle:toggle-labels', (() => {
+      const api = (window as any).__waterCycleApi;
+      const newValue = api?.toggleLabels();
+      document.dispatchEvent(new CustomEvent('water-cycle:labels-changed', { detail: { value: newValue } }));
+    }) as EventListener);
+
+    document.addEventListener('water-cycle:toggle-flow', (() => {
+      const api = (window as any).__waterCycleApi;
+      const newValue = api?.toggleFlow();
+      document.dispatchEvent(new CustomEvent('water-cycle:flow-changed', { detail: { value: newValue } }));
+    }) as EventListener);
+
+    document.addEventListener('water-cycle:download', (() => {
+      const api = (window as any).__waterCycleApi;
+      api?.downloadImage();
+    }) as EventListener);
+  });
+</script>
+
+<style>
+  .canvas-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .canvas-area {
+    width: 100%;
+    /* 使用aspect-ratio代替固定高度，响应式且保持比例 */
+    aspect-ratio: 2 / 1;
+    min-height: 300px;
+    max-height: 600px;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 50%, #90EE90 100%);
+  }
+
+  #canvas-container {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 确保canvas填满容器 */
+  #canvas-container :global(canvas) {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+</style>

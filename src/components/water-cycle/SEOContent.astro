@@ -1,0 +1,128 @@
+---
+// SEO Content Component
+// 页面底部的SEO内容区域，包含FAQ和教育内容
+---
+
+<section class="seo-section">
+  <div class="seo-container">
+    <div class="seo-column">
+      <h3>Common Questions Answered</h3>
+      <div class="faq-item">
+        <div class="faq-question">What are the 4 stages of the water cycle?</div>
+        <div class="faq-answer">
+          The 4 basic stages are: Evaporation, Condensation, Precipitation, and Collection.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Why is the water cycle important?</div>
+        <div class="faq-answer">
+          The water cycle is essential for distributing fresh water around the planet, supporting all life forms, and regulating Earth's climate.
+        </div>
+      </div>
+    </div>
+
+    <div class="seo-column">
+      <h3>Did You Know?</h3>
+      <ul>
+        <li>The water cycle has been happening for billions of years</li>
+        <li>Water on Earth today is the same water dinosaurs drank</li>
+        <li>97% of Earth's water is in the oceans</li>
+        <li>Only 3% is freshwater, and most is frozen</li>
+        <li>A water drop can spend 3,000 years in the ocean</li>
+      </ul>
+    </div>
+
+    <div class="seo-column">
+      <h3>How to Explain the Water Cycle</h3>
+      <p>
+        The water cycle is nature's way of recycling water. The sun heats water in oceans and
+        lakes, turning it into vapor (evaporation). This vapor rises and cools to form clouds
+        (condensation). When clouds get heavy, water falls as rain or snow (precipitation). The
+        water then flows back to oceans and lakes (collection), and the cycle repeats forever.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .seo-section {
+    background: transparent;
+    padding: 60px 0;
+  }
+
+  .seo-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .seo-column h3 {
+    color: #000000;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .faq-item {
+    margin-bottom: 20px;
+  }
+
+  .faq-question {
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+
+  .faq-answer {
+    color: #666666;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .seo-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .seo-column ul li {
+    color: #666666;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .seo-column ul li::before {
+    content: '\2022';
+    position: absolute;
+    left: 0;
+    color: #000000;
+    font-weight: bold;
+  }
+
+  .seo-column p {
+    color: #666666;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 768px) {
+    .seo-container {
+      grid-template-columns: 1fr;
+      gap: 35px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .seo-container {
+      gap: 30px;
+    }
+  }
+</style>

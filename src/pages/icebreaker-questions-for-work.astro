@@ -1,0 +1,473 @@
+---
+import Container from "@/components/container.astro";
+import Layout from "@/layouts/Layout.astro";
+
+// 问题数据
+const questionCategories = {
+  "Team Meetings": [
+    "What's one thing you're proud of accomplishing this week?",
+    "If you could have dinner with anyone, dead or alive, who would it be?",
+    "What's your favorite way to unwind after work?",
+    "If you could learn any skill instantly, what would it be?",
+    "What's the best piece of advice you've ever received?",
+    "What's your favorite season and why?",
+    "If you could travel anywhere right now, where would you go?",
+    "What's one goal you're working towards this quarter?",
+    "What's your go-to productivity hack?",
+    "If you could swap jobs with anyone for a day, who would it be?",
+    "What's the most interesting thing you've learned recently?",
+    "What's your favorite way to start the day?",
+    "If you had a superpower for work, what would it be?",
+    "What's one tradition you'd like to start with the team?",
+    "What's the best book or podcast you've experienced lately?"
+  ],
+  "Remote Work": [
+    "What's your favorite thing about working remotely?",
+    "What's the most unusual place you've taken a video call?",
+    "How do you separate work mode from home mode?",
+    "What's your ideal work-from-home setup?",
+    "What's the biggest challenge of remote work for you?",
+    "Do you prefer video on or off during calls?",
+    "What's your favorite remote work snack?",
+    "How do you stay connected with your team remotely?",
+    "What's one remote work tip you'd share with others?",
+    "Do you have any pets that make cameo appearances?",
+    "What's your background story (literally, your video background)?",
+    "What time of day are you most productive at home?",
+    "What's one thing you miss about the office?",
+    "How many coffee/tea cups do you go through in a workday?",
+    "What's your strategy for avoiding distractions at home?"
+  ],
+  "Get to Know": [
+    "What did you want to be when you were growing up?",
+    "What's something people might be surprised to learn about you?",
+    "What's your hidden talent?",
+    "What's your favorite childhood memory?",
+    "If you could have any job for a week, what would it be?",
+    "What's the most interesting place you've visited?",
+    "What's your favorite hobby outside of work?",
+    "What's one thing on your bucket list?",
+    "What's the best concert or show you've attended?",
+    "What's your favorite cuisine or restaurant?",
+    "Do you have any collections or things you're passionate about?",
+    "What's the most adventurous thing you've done?",
+    "What's your comfort food?",
+    "What's your favorite movie or TV show?",
+    "If you could master any musical instrument, which would it be?"
+  ],
+  "Quick & Fun": [
+    "Coffee or tea?",
+    "Early bird or night owl?",
+    "Beach or mountains?",
+    "Dogs or cats?",
+    "Summer or winter?",
+    "Texting or calling?",
+    "Sweet or savory?",
+    "Books or movies?",
+    "Spontaneous or planned?",
+    "Indoor or outdoor activities?",
+    "Silence or background music while working?",
+    "Emoji fan or emoji skeptic?",
+    "Morning shower or evening shower?",
+    "Pen and paper or digital notes?",
+    "Pizza or tacos?"
+  ],
+  "Would You Rather": [
+    "Would you rather work four 10-hour days or five 8-hour days?",
+    "Would you rather always be 10 minutes late or 20 minutes early?",
+    "Would you rather have unlimited vacation days or unlimited sick days?",
+    "Would you rather work in a team or independently?",
+    "Would you rather give a presentation or write a report?",
+    "Would you rather have a personal chef or a personal trainer?",
+    "Would you rather travel to the past or the future?",
+    "Would you rather be able to fly or be invisible?",
+    "Would you rather live without your phone or your computer?",
+    "Would you rather always work from home or always work from the office?",
+    "Would you rather have a rewind button or a pause button for life?",
+    "Would you rather be famous or wealthy?",
+    "Would you rather explore space or the deep ocean?",
+    "Would you rather never have to sleep or never have to eat?",
+    "Would you rather win the lottery or live twice as long?"
+  ],
+  "Creative": [
+    "If your life was a movie, what would the title be?",
+    "If you could create a new holiday, what would it celebrate?",
+    "If you could design your perfect office, what would it include?",
+    "If you had to eat one meal for the rest of your life, what would it be?",
+    "If you could be any fictional character, who would you choose?",
+    "If you could invent something, what would it be?",
+    "If you could time travel to any era, when would you go?",
+    "If you could have any exotic pet, what would it be?",
+    "If you could rename yourself, what name would you choose?",
+    "If you could live in any book, movie, or TV show, which would it be?",
+    "If you could create a new ice cream flavor, what would it be?",
+    "If you could have dinner with three people, dead or alive, who would they be?",
+    "If you were a superhero, what would your origin story be?",
+    "If you could master any art form, what would it be?",
+    "If you could create your own island, what would you name it and what would be there?"
+  ],
+  "Professional": [
+    "What motivated you to pursue your current career path?",
+    "What's the most valuable lesson you've learned in your career?",
+    "Who's been the biggest influence on your professional development?",
+    "What's your proudest professional achievement?",
+    "What skill do you think is most important for success in your role?",
+    "How do you approach problem-solving at work?",
+    "What's one thing you'd like to learn to advance your career?",
+    "What's the best feedback you've ever received?",
+    "How do you define success in your role?",
+    "What's your approach to work-life balance?",
+    "What's one professional goal you have for this year?",
+    "What's the most challenging project you've worked on?",
+    "How do you stay motivated during difficult tasks?",
+    "What's your preferred communication style at work?",
+    "What advice would you give to someone starting in your field?"
+  ]
+};
+
+// 获取所有问题
+const allQuestions = Object.entries(questionCategories).flatMap(([category, questions]) =>
+  questions.map(q => ({ question: q, category }))
+);
+---
+
+<Layout title="150+ Icebreaker Questions for Work">
+  <Container>
+    <!-- 头部区域 -->
+    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-3xl p-8 md:p-12 mt-8 mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">
+        150+ Icebreaker Questions for Work
+      </h1>
+      <p class="text-lg md:text-xl opacity-90 max-w-3xl">
+        Break the ice, build connections, and create memorable team moments with these carefully curated questions for every workplace situation.
+      </p>
+    </div>
+
+    <!-- 随机问题生成器 -->
+    <div class="mb-16">
+      <div class="bg-white rounded-2xl shadow-lg p-8 md:p-10 border border-gray-100">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+          Random Question Generator
+        </h2>
+
+        <!-- 分类筛选按钮 -->
+        <div class="flex flex-wrap gap-2 justify-center mb-8">
+          <button
+            class="category-filter px-4 py-2 rounded-full text-sm font-medium transition-all bg-indigo-600 text-white"
+            data-category="all"
+          >
+            All Categories
+          </button>
+          {Object.keys(questionCategories).map((category) => (
+            <button
+              class="category-filter px-4 py-2 rounded-full text-sm font-medium transition-all bg-gray-100 text-gray-700 hover:bg-gray-200"
+              data-category={category}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+
+        <!-- 问题卡片 -->
+        <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-8 md:p-10 mb-6 min-h-[200px] flex items-center justify-center">
+          <div class="text-center">
+            <p id="current-question" class="text-xl md:text-2xl font-semibold text-gray-800 mb-2">
+              Click "Generate" to get a random question!
+            </p>
+            <p id="current-category" class="text-sm text-indigo-600 font-medium"></p>
+          </div>
+        </div>
+
+        <!-- 按钮组 -->
+        <div class="flex gap-3 justify-center">
+          <button
+            id="generate-btn"
+            class="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg"
+          >
+            Generate
+          </button>
+          <button
+            id="copy-btn"
+            class="px-8 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-all shadow-md hover:shadow-lg"
+          >
+            Copy
+          </button>
+        </div>
+
+        <!-- 复制成功提示 -->
+        <div id="copy-toast" class="hidden fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+          Copied to clipboard!
+        </div>
+      </div>
+    </div>
+
+    <!-- 按分类展示问题 -->
+    <div class="mb-16">
+      <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+        Browse by Category
+      </h2>
+
+      <div class="space-y-4">
+        {Object.entries(questionCategories).map(([category, questions]) => (
+          <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+            <button
+              class="accordion-header w-full px-6 py-5 flex items-center justify-between hover:bg-gray-50 transition-colors"
+              data-category={category}
+            >
+              <div class="flex items-center gap-3">
+                <span class="text-lg font-semibold text-gray-800">{category}</span>
+                <span class="text-sm text-gray-500">({questions.length} questions)</span>
+              </div>
+              <svg class="w-5 h-5 text-gray-500 transition-transform accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <div class="accordion-content hidden px-6 pb-6">
+              <div class="space-y-3 pt-2">
+                {questions.map((question, index) => (
+                  <div class="flex items-start gap-3 group">
+                    <span class="text-indigo-600 font-medium text-sm mt-1 flex-shrink-0">
+                      {index + 1}.
+                    </span>
+                    <p class="text-gray-700 flex-1">{question}</p>
+                    <button
+                      class="copy-question-btn opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 text-gray-400 hover:text-indigo-600"
+                      data-question={question}
+                      title="Copy question"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- 使用指南 -->
+    <div class="mb-16">
+      <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-8 md:p-10">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">
+          How to Use Icebreaker Questions
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white rounded-xl p-6 shadow-sm">
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">
+                1
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-800 mb-2">Choose the Right Moment</h3>
+                <p class="text-gray-600">
+                  Start meetings, onboarding sessions, or team events with an icebreaker to create a welcoming atmosphere.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-6 shadow-sm">
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">
+                2
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-800 mb-2">Match the Context</h3>
+                <p class="text-gray-600">
+                  Select questions appropriate for your team's size, formality level, and time constraints.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-6 shadow-sm">
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">
+                3
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-800 mb-2">Lead by Example</h3>
+                <p class="text-gray-600">
+                  Answer the question first to set the tone and encourage others to participate comfortably.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-6 shadow-sm">
+            <div class="flex items-start gap-4">
+              <div class="flex-shrink-0 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold">
+                4
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-800 mb-2">Keep It Light</h3>
+                <p class="text-gray-600">
+                  Ensure questions are inclusive and fun. Avoid controversial topics or anything too personal.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ 部分 -->
+    <div class="mb-16">
+      <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">
+        Frequently Asked Questions
+      </h2>
+
+      <div class="space-y-4 max-w-3xl mx-auto">
+        <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+          <h3 class="font-semibold text-gray-800 mb-3">
+            Why are icebreaker questions important at work?
+          </h3>
+          <p class="text-gray-600">
+            Icebreaker questions help team members connect on a personal level, reduce social anxiety, and create a more collaborative work environment. They're especially valuable for remote teams or new team members.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+          <h3 class="font-semibold text-gray-800 mb-3">
+            How long should an icebreaker activity take?
+          </h3>
+          <p class="text-gray-600">
+            Most icebreaker activities work best when kept to 5-10 minutes. For "Quick & Fun" questions, 2-3 minutes per person is sufficient. For deeper questions, allow more time for thoughtful responses.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+          <h3 class="font-semibold text-gray-800 mb-3">
+            What if someone doesn't want to answer?
+          </h3>
+          <p class="text-gray-600">
+            Always make participation optional. Some people may be shy or uncomfortable with certain topics. Have a "pass" option available, and never pressure anyone to share more than they're comfortable with.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+          <h3 class="font-semibold text-gray-800 mb-3">
+            Can I use these questions for virtual meetings?
+          </h3>
+          <p class="text-gray-600">
+            Absolutely! These questions work great for virtual meetings. The "Remote Work" category is specifically designed for distributed teams. Consider using the chat function for quieter team members to participate.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+          <h3 class="font-semibold text-gray-800 mb-3">
+            How often should I use icebreaker questions?
+          </h3>
+          <p class="text-gray-600">
+            For regular team meetings, once a week is a good cadence. For all-hands meetings or larger gatherings, use them at the start. The key is consistency without making them feel repetitive or forced.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </Container>
+
+  <!-- JavaScript -->
+  <script define:vars={{ allQuestions, questionCategories }}>
+    let currentFilter = 'all';
+    let currentQuestion = '';
+
+    // 获取随机问题
+    function getRandomQuestion() {
+      let filteredQuestions = allQuestions;
+
+      if (currentFilter !== 'all') {
+        filteredQuestions = allQuestions.filter(q => q.category === currentFilter);
+      }
+
+      if (filteredQuestions.length === 0) {
+        return null;
+      }
+
+      const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
+      return filteredQuestions[randomIndex];
+    }
+
+    // 生成按钮
+    document.getElementById('generate-btn').addEventListener('click', () => {
+      const questionData = getRandomQuestion();
+      if (questionData) {
+        currentQuestion = questionData.question;
+        document.getElementById('current-question').textContent = questionData.question;
+        document.getElementById('current-category').textContent = `Category: ${questionData.category}`;
+      }
+    });
+
+    // 复制按钮
+    document.getElementById('copy-btn').addEventListener('click', () => {
+      if (currentQuestion) {
+        navigator.clipboard.writeText(currentQuestion).then(() => {
+          const toast = document.getElementById('copy-toast');
+          toast.classList.remove('hidden');
+          setTimeout(() => {
+            toast.classList.add('hidden');
+          }, 2000);
+        });
+      }
+    });
+
+    // 分类筛选
+    document.querySelectorAll('.category-filter').forEach(button => {
+      button.addEventListener('click', () => {
+        // 移除所有按钮的激活状态
+        document.querySelectorAll('.category-filter').forEach(btn => {
+          btn.classList.remove('bg-indigo-600', 'text-white');
+          btn.classList.add('bg-gray-100', 'text-gray-700');
+        });
+
+        // 激活当前按钮
+        button.classList.remove('bg-gray-100', 'text-gray-700');
+        button.classList.add('bg-indigo-600', 'text-white');
+
+        // 设置筛选器
+        currentFilter = button.dataset.category;
+
+        // 重置显示
+        document.getElementById('current-question').textContent = 'Click "Generate" to get a random question!';
+        document.getElementById('current-category').textContent = '';
+        currentQuestion = '';
+      });
+    });
+
+    // 手风琴展开/收起
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.accordion-icon');
+
+        // 切换显示
+        if (content.classList.contains('hidden')) {
+          content.classList.remove('hidden');
+          icon.style.transform = 'rotate(180deg)';
+        } else {
+          content.classList.add('hidden');
+          icon.style.transform = 'rotate(0deg)';
+        }
+      });
+    });
+
+    // 复制单个问题
+    document.querySelectorAll('.copy-question-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const question = button.dataset.question;
+        navigator.clipboard.writeText(question).then(() => {
+          const toast = document.getElementById('copy-toast');
+          toast.classList.remove('hidden');
+          setTimeout(() => {
+            toast.classList.add('hidden');
+          }, 2000);
+        });
+      });
+    });
+  </script>
+</Layout>
