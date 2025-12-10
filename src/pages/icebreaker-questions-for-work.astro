@@ -2,9 +2,13 @@
 import Container from "@/components/container.astro";
 import Layout from "@/layouts/Layout.astro";
 
-// 问题数据
+// SEO metadata
+const pageTitle = "200+ Icebreaker Questions for Work: Team Building Guide";
+const pageDescription = "Icebreaker questions for work that actually work! 200+ team meeting questions organized by category. Perfect for remote teams, onboarding, and daily standups.";
+
+// 问题数据 - 7个分类，每个25-30题，共200+
 const questionCategories = {
-  "Team Meetings": [
+  "Team Meeting Starters": [
     "What's one thing you're proud of accomplishing this week?",
     "If you could have dinner with anyone, dead or alive, who would it be?",
     "What's your favorite way to unwind after work?",
@@ -19,9 +23,19 @@ const questionCategories = {
     "What's your favorite way to start the day?",
     "If you had a superpower for work, what would it be?",
     "What's one tradition you'd like to start with the team?",
-    "What's the best book or podcast you've experienced lately?"
+    "What's the best book or podcast you've experienced lately?",
+    "What's your morning routine before work?",
+    "What skill would you love to master this year?",
+    "What's the best meeting you've ever attended and why?",
+    "If you could add one thing to our office, what would it be?",
+    "What's your favorite way to celebrate a team win?",
+    "What motivates you most at work?",
+    "What's your favorite work accomplishment?",
+    "How do you handle stress at work?",
+    "What's your ideal workday look like?",
+    "What's one thing that made you smile this week?"
   ],
-  "Remote Work": [
+  "Remote Work & Virtual Teams": [
     "What's your favorite thing about working remotely?",
     "What's the most unusual place you've taken a video call?",
     "How do you separate work mode from home mode?",
@@ -36,9 +50,19 @@ const questionCategories = {
     "What time of day are you most productive at home?",
     "What's one thing you miss about the office?",
     "How many coffee/tea cups do you go through in a workday?",
-    "What's your strategy for avoiding distractions at home?"
+    "What's your strategy for avoiding distractions at home?",
+    "What's your favorite virtual meeting tool feature?",
+    "How do you take breaks when working from home?",
+    "What's your home office must-have item?",
+    "Do you work better with background noise or silence?",
+    "What's the best thing about no commute?",
+    "How do you maintain work-life boundaries at home?",
+    "What's your go-to work playlist?",
+    "How do you stay motivated working alone?",
+    "What virtual team activity have you enjoyed most?",
+    "What's your remote work dress code?"
   ],
-  "Get to Know": [
+  "Get to Know You": [
     "What did you want to be when you were growing up?",
     "What's something people might be surprised to learn about you?",
     "What's your hidden talent?",
@@ -53,9 +77,19 @@ const questionCategories = {
     "What's the most adventurous thing you've done?",
     "What's your comfort food?",
     "What's your favorite movie or TV show?",
-    "If you could master any musical instrument, which would it be?"
+    "If you could master any musical instrument, which would it be?",
+    "What's your favorite family tradition?",
+    "What was your first job ever?",
+    "What's a skill you're proud of learning on your own?",
+    "What's the best gift you've ever received?",
+    "Who has been your biggest mentor?",
+    "What's your favorite thing about where you grew up?",
+    "What language would you love to learn?",
+    "What's your favorite weekend activity?",
+    "What was your favorite subject in school?",
+    "What's the last thing that made you laugh out loud?"
   ],
-  "Quick & Fun": [
+  "Quick & Fun (This or That)": [
     "Coffee or tea?",
     "Early bird or night owl?",
     "Beach or mountains?",
@@ -67,10 +101,20 @@ const questionCategories = {
     "Spontaneous or planned?",
     "Indoor or outdoor activities?",
     "Silence or background music while working?",
-    "Emoji fan or emoji skeptic?",
-    "Morning shower or evening shower?",
     "Pen and paper or digital notes?",
-    "Pizza or tacos?"
+    "Pizza or tacos?",
+    "City or countryside?",
+    "Netflix or YouTube?",
+    "Cooking or ordering in?",
+    "Sunrise or sunset?",
+    "Solo travel or group trips?",
+    "Email or instant message?",
+    "Casual or formal meetings?",
+    "Monday mornings or Friday afternoons?",
+    "Phone calls or video calls?",
+    "Hot weather or cold weather?",
+    "Fiction or non-fiction?",
+    "Morning workout or evening workout?"
   ],
   "Would You Rather": [
     "Would you rather work four 10-hour days or five 8-hour days?",
@@ -87,9 +131,19 @@ const questionCategories = {
     "Would you rather be famous or wealthy?",
     "Would you rather explore space or the deep ocean?",
     "Would you rather never have to sleep or never have to eat?",
-    "Would you rather win the lottery or live twice as long?"
+    "Would you rather win the lottery or live twice as long?",
+    "Would you rather have more meetings or more emails?",
+    "Would you rather lead a project or be part of a larger team?",
+    "Would you rather have a mentor or be a mentor?",
+    "Would you rather get a promotion or a big bonus?",
+    "Would you rather work on one big project or many small ones?",
+    "Would you rather have the best coffee machine or the best chair?",
+    "Would you rather have a standing desk or a treadmill desk?",
+    "Would you rather always have good wifi or always have good weather?",
+    "Would you rather be overly prepared or wing it?",
+    "Would you rather give feedback or receive feedback?"
   ],
-  "Creative": [
+  "Creative & Hypothetical": [
     "If your life was a movie, what would the title be?",
     "If you could create a new holiday, what would it celebrate?",
     "If you could design your perfect office, what would it include?",
@@ -104,9 +158,19 @@ const questionCategories = {
     "If you could have dinner with three people, dead or alive, who would they be?",
     "If you were a superhero, what would your origin story be?",
     "If you could master any art form, what would it be?",
-    "If you could create your own island, what would you name it and what would be there?"
+    "If you could create your own island, what would you name it?",
+    "If you could have any celebrity as a coworker, who would it be?",
+    "If you could add any feature to your workspace, what would it be?",
+    "If you could eliminate one work task forever, what would it be?",
+    "If your job didn't exist, what would you be doing instead?",
+    "If you could attend any event in history, what would it be?",
+    "If you could instantly become an expert in something, what would it be?",
+    "If you could solve one world problem, what would it be?",
+    "If you had a theme song that played when you entered a room, what would it be?",
+    "If you could have any animal ability, what would you choose?",
+    "If you won a trip anywhere, where would you go?"
   ],
-  "Professional": [
+  "Professional Development": [
     "What motivated you to pursue your current career path?",
     "What's the most valuable lesson you've learned in your career?",
     "Who's been the biggest influence on your professional development?",
@@ -121,7 +185,44 @@ const questionCategories = {
     "What's the most challenging project you've worked on?",
     "How do you stay motivated during difficult tasks?",
     "What's your preferred communication style at work?",
-    "What advice would you give to someone starting in your field?"
+    "What advice would you give to someone starting in your field?",
+    "What's the biggest risk you've taken in your career?",
+    "How do you handle disagreements at work?",
+    "What's your strategy for continuous learning?",
+    "What professional skill took you longest to develop?",
+    "What's the best career advice you've received?",
+    "How do you celebrate your wins at work?",
+    "What's one habit that has helped your career?",
+    "What industry trend are you most excited about?",
+    "How do you prioritize when everything feels urgent?",
+    "What leadership quality do you most admire?"
+  ],
+  "New Team Member Questions": [
+    "What brought you to this company?",
+    "What's the most interesting thing you've learned so far?",
+    "What questions do you have about our team culture?",
+    "What's been your favorite part of onboarding?",
+    "What do you hope to accomplish in your first 90 days?",
+    "How do you prefer to receive feedback?",
+    "What kind of projects are you most excited to work on?",
+    "What's your communication style preference?",
+    "What can the team do to help you succeed?",
+    "What's one fun fact about yourself?",
+    "What's your work style preference?",
+    "What made you decide to join our team?",
+    "What previous experience are you most proud of?",
+    "What do you like to do outside of work?",
+    "What's your favorite thing about our industry?",
+    "How do you like to collaborate with teammates?",
+    "What's your preferred way to stay organized?",
+    "What energizes you at work?",
+    "What's one thing you're hoping to learn from this team?",
+    "How can we make your transition easier?",
+    "What tools do you find most helpful for work?",
+    "What's your ideal meeting style?",
+    "What challenges are you looking forward to tackling?",
+    "How do you like to celebrate team achievements?",
+    "What's one thing we should know about working with you?"
   ]
 };
 
@@ -129,28 +230,60 @@ const questionCategories = {
 const allQuestions = Object.entries(questionCategories).flatMap(([category, questions]) =>
   questions.map(q => ({ question: q, category }))
 );
+
+// 计算总问题数
+const totalQuestions = allQuestions.length;
 ---
 
-<Layout title="150+ Icebreaker Questions for Work">
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+>
   <Container>
-    <!-- 头部区域 -->
+    <!-- Hero Section -->
     <div class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-3xl p-8 md:p-12 mt-8 mb-12">
       <h1 class="text-4xl md:text-5xl font-bold mb-4">
-        150+ Icebreaker Questions for Work
+        {totalQuestions}+ Icebreaker Questions for Work
       </h1>
-      <p class="text-lg md:text-xl opacity-90 max-w-3xl">
-        Break the ice, build connections, and create memorable team moments with these carefully curated questions for every workplace situation.
+      <p class="text-lg md:text-xl opacity-90 max-w-3xl mb-6">
+        The ultimate collection of icebreaker questions for work meetings, team building, and remote collaboration. Break the ice, build connections, and create memorable team moments.
       </p>
+      <div class="flex flex-wrap gap-4 text-sm">
+        <span class="bg-white/20 px-4 py-2 rounded-full">8 Categories</span>
+        <span class="bg-white/20 px-4 py-2 rounded-full">{totalQuestions}+ Questions</span>
+        <span class="bg-white/20 px-4 py-2 rounded-full">Copy & Use Instantly</span>
+      </div>
     </div>
 
-    <!-- 随机问题生成器 -->
+    <!-- Why Icebreaker Questions for Work Matter -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">
+        Why Icebreaker Questions for Work Matter
+      </h2>
+      <div class="prose prose-lg max-w-none text-gray-700">
+        <p>
+          Research shows that icebreaker questions for work can significantly improve team dynamics. A 1997 study found that pairs who shared personal information felt significantly closer than those who engaged in small talk. Icebreaker questions for work help team members connect on a personal level, reduce social anxiety, and create a more collaborative environment.
+        </p>
+        <p>
+          The best icebreaker questions for work are:
+        </p>
+        <ul>
+          <li><strong>Appropriate</strong> - Professional yet personal enough to create connection</li>
+          <li><strong>Quick</strong> - Answerable in 30 seconds to 2 minutes</li>
+          <li><strong>Inclusive</strong> - Everyone can participate regardless of background</li>
+          <li><strong>Interesting</strong> - Spark genuine conversation, not eye rolls</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Random Question Generator -->
     <div class="mb-16">
       <div class="bg-white rounded-2xl shadow-lg p-8 md:p-10 border border-gray-100">
         <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-          Random Question Generator
+          Random Icebreaker Question Generator
         </h2>
 
-        <!-- 分类筛选按钮 -->
+        <!-- Category Filter Buttons -->
         <div class="flex flex-wrap gap-2 justify-center mb-8">
           <button
             class="category-filter px-4 py-2 rounded-full text-sm font-medium transition-all bg-indigo-600 text-white"
@@ -168,43 +301,43 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
           ))}
         </div>
 
-        <!-- 问题卡片 -->
+        <!-- Question Card -->
         <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-8 md:p-10 mb-6 min-h-[200px] flex items-center justify-center">
           <div class="text-center">
             <p id="current-question" class="text-xl md:text-2xl font-semibold text-gray-800 mb-2">
-              Click "Generate" to get a random question!
+              Click "Generate" to get a random icebreaker question for work!
             </p>
             <p id="current-category" class="text-sm text-indigo-600 font-medium"></p>
           </div>
         </div>
 
-        <!-- 按钮组 -->
+        <!-- Action Buttons -->
         <div class="flex gap-3 justify-center">
           <button
             id="generate-btn"
             class="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg"
           >
-            Generate
+            Generate Question
           </button>
           <button
             id="copy-btn"
             class="px-8 py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-all shadow-md hover:shadow-lg"
           >
-            Copy
+            Copy to Clipboard
           </button>
         </div>
 
-        <!-- 复制成功提示 -->
-        <div id="copy-toast" class="hidden fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+        <!-- Copy Toast -->
+        <div id="copy-toast" class="hidden fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
           Copied to clipboard!
         </div>
       </div>
     </div>
 
-    <!-- 按分类展示问题 -->
+    <!-- Browse by Category -->
     <div class="mb-16">
       <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">
-        Browse by Category
+        Browse Icebreaker Questions for Work by Category
       </h2>
 
       <div class="space-y-4">
@@ -249,11 +382,11 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
       </div>
     </div>
 
-    <!-- 使用指南 -->
-    <div class="mb-16">
+    <!-- How to Use Guide -->
+    <section class="mb-16">
       <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-8 md:p-10">
         <h2 class="text-3xl font-bold text-gray-800 mb-6">
-          How to Use Icebreaker Questions
+          How to Use Icebreaker Questions for Work
         </h2>
 
         <div class="grid md:grid-cols-2 gap-6">
@@ -265,7 +398,7 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
               <div>
                 <h3 class="font-semibold text-gray-800 mb-2">Choose the Right Moment</h3>
                 <p class="text-gray-600">
-                  Start meetings, onboarding sessions, or team events with an icebreaker to create a welcoming atmosphere.
+                  Use icebreaker questions for work at the start of meetings, during onboarding, or when introducing new team members. Timing matters!
                 </p>
               </div>
             </div>
@@ -279,7 +412,7 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
               <div>
                 <h3 class="font-semibold text-gray-800 mb-2">Match the Context</h3>
                 <p class="text-gray-600">
-                  Select questions appropriate for your team's size, formality level, and time constraints.
+                  Select icebreaker questions for work that match your team's size, formality level, and available time.
                 </p>
               </div>
             </div>
@@ -293,7 +426,7 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
               <div>
                 <h3 class="font-semibold text-gray-800 mb-2">Lead by Example</h3>
                 <p class="text-gray-600">
-                  Answer the question first to set the tone and encourage others to participate comfortably.
+                  Answer the icebreaker question first to set the tone. This encourages others to participate openly.
                 </p>
               </div>
             </div>
@@ -305,70 +438,124 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
                 4
               </div>
               <div>
-                <h3 class="font-semibold text-gray-800 mb-2">Keep It Light</h3>
+                <h3 class="font-semibold text-gray-800 mb-2">Keep It Optional</h3>
                 <p class="text-gray-600">
-                  Ensure questions are inclusive and fun. Avoid controversial topics or anything too personal.
+                  Never pressure anyone. Good icebreaker questions for work create comfort, not anxiety.
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- FAQ 部分 -->
-    <div class="mb-16">
+    <!-- Best Practices -->
+    <section class="mb-16">
+      <h2 class="text-3xl font-bold text-gray-800 mb-8">
+        Best Practices for Icebreaker Questions for Work
+      </h2>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
+          <h3 class="font-bold text-lg text-gray-800 mb-3">For Team Meetings</h3>
+          <p class="text-gray-600 mb-4">Keep icebreaker questions for work brief (2-3 minutes max). Use "Quick & Fun" questions for daily standups.</p>
+          <p class="text-sm text-indigo-600">Best Categories: Team Meeting Starters, Quick & Fun</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
+          <h3 class="font-bold text-lg text-gray-800 mb-3">For Remote Teams</h3>
+          <p class="text-gray-600 mb-4">Icebreaker questions for work help remote teams feel connected. Use video for better engagement.</p>
+          <p class="text-sm text-indigo-600">Best Categories: Remote Work, Get to Know You</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
+          <h3 class="font-bold text-lg text-gray-800 mb-3">For New Hires</h3>
+          <p class="text-gray-600 mb-4">Help new team members feel welcome with supportive icebreaker questions for work.</p>
+          <p class="text-sm text-indigo-600">Best Categories: New Team Member, Get to Know You</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-16">
       <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">
-        Frequently Asked Questions
+        Frequently Asked Questions About Icebreaker Questions for Work
       </h2>
 
       <div class="space-y-4 max-w-3xl mx-auto">
         <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
           <h3 class="font-semibold text-gray-800 mb-3">
-            Why are icebreaker questions important at work?
+            What are the best icebreaker questions for work?
           </h3>
           <p class="text-gray-600">
-            Icebreaker questions help team members connect on a personal level, reduce social anxiety, and create a more collaborative work environment. They're especially valuable for remote teams or new team members.
+            The best icebreaker questions for work are inclusive, professional yet personal, and quick to answer. "Quick & Fun" questions work great for daily meetings, while "Get to Know You" questions are perfect for team building sessions.
           </p>
         </div>
 
         <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
           <h3 class="font-semibold text-gray-800 mb-3">
-            How long should an icebreaker activity take?
+            How long should icebreaker questions for work take?
           </h3>
           <p class="text-gray-600">
-            Most icebreaker activities work best when kept to 5-10 minutes. For "Quick & Fun" questions, 2-3 minutes per person is sufficient. For deeper questions, allow more time for thoughtful responses.
+            Icebreaker questions for work should take 5-10 minutes total. For "Quick & Fun" questions, aim for 30 seconds per person. For deeper questions, allow 1-2 minutes per response.
           </p>
         </div>
 
         <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
           <h3 class="font-semibold text-gray-800 mb-3">
-            What if someone doesn't want to answer?
+            What if someone doesn't want to answer icebreaker questions for work?
           </h3>
           <p class="text-gray-600">
-            Always make participation optional. Some people may be shy or uncomfortable with certain topics. Have a "pass" option available, and never pressure anyone to share more than they're comfortable with.
+            Always make icebreaker questions for work optional. Offer a "pass" option. Some team members may be shy or uncomfortable with certain topics. Never pressure anyone to share more than they're comfortable with.
           </p>
         </div>
 
         <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
           <h3 class="font-semibold text-gray-800 mb-3">
-            Can I use these questions for virtual meetings?
+            Are icebreaker questions for work effective for virtual meetings?
           </h3>
           <p class="text-gray-600">
-            Absolutely! These questions work great for virtual meetings. The "Remote Work" category is specifically designed for distributed teams. Consider using the chat function for quieter team members to participate.
+            Yes! Icebreaker questions for work are especially valuable for virtual teams. They help combat "Zoom fatigue" and create connection despite physical distance. Use the "Remote Work" category for best results.
           </p>
         </div>
 
         <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
           <h3 class="font-semibold text-gray-800 mb-3">
-            How often should I use icebreaker questions?
+            How often should you use icebreaker questions for work?
           </h3>
           <p class="text-gray-600">
-            For regular team meetings, once a week is a good cadence. For all-hands meetings or larger gatherings, use them at the start. The key is consistency without making them feel repetitive or forced.
+            Use icebreaker questions for work once per week for regular team meetings. For all-hands meetings or larger gatherings, include them at the start. Consistency builds team culture without making it feel forced.
+          </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+          <h3 class="font-semibold text-gray-800 mb-3">
+            What icebreaker questions for work avoid controversy?
+          </h3>
+          <p class="text-gray-600">
+            The best icebreaker questions for work avoid politics, religion, and personal finances. Stick to topics like hobbies, preferences, hypothetical scenarios, and professional development. Our curated list avoids sensitive topics.
           </p>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="mb-16">
+      <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-8 md:p-12 text-center text-white">
+        <h2 class="text-3xl font-bold mb-4">
+          Start Using Icebreaker Questions for Work Today
+        </h2>
+        <p class="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
+          With {totalQuestions}+ questions across 8 categories, you'll never run out of ways to connect with your team. Bookmark this page and use it before your next meeting!
+        </p>
+        <button
+          id="scroll-to-generator"
+          class="px-8 py-4 bg-white text-indigo-600 font-bold rounded-lg hover:bg-gray-100 transition-all shadow-lg"
+        >
+          Generate a Question Now
+        </button>
+      </div>
+    </section>
 
   </Container>
 
@@ -377,7 +564,7 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
     let currentFilter = 'all';
     let currentQuestion = '';
 
-    // 获取随机问题
+    // Get random question
     function getRandomQuestion() {
       let filteredQuestions = allQuestions;
 
@@ -393,7 +580,7 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
       return filteredQuestions[randomIndex];
     }
 
-    // 生成按钮
+    // Generate button
     document.getElementById('generate-btn').addEventListener('click', () => {
       const questionData = getRandomQuestion();
       if (questionData) {
@@ -403,7 +590,7 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
       }
     });
 
-    // 复制按钮
+    // Copy button
     document.getElementById('copy-btn').addEventListener('click', () => {
       if (currentQuestion) {
         navigator.clipboard.writeText(currentQuestion).then(() => {
@@ -416,36 +603,31 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
       }
     });
 
-    // 分类筛选
+    // Category filter
     document.querySelectorAll('.category-filter').forEach(button => {
       button.addEventListener('click', () => {
-        // 移除所有按钮的激活状态
         document.querySelectorAll('.category-filter').forEach(btn => {
           btn.classList.remove('bg-indigo-600', 'text-white');
           btn.classList.add('bg-gray-100', 'text-gray-700');
         });
 
-        // 激活当前按钮
         button.classList.remove('bg-gray-100', 'text-gray-700');
         button.classList.add('bg-indigo-600', 'text-white');
 
-        // 设置筛选器
         currentFilter = button.dataset.category;
 
-        // 重置显示
-        document.getElementById('current-question').textContent = 'Click "Generate" to get a random question!';
+        document.getElementById('current-question').textContent = 'Click "Generate" to get a random icebreaker question for work!';
         document.getElementById('current-category').textContent = '';
         currentQuestion = '';
       });
     });
 
-    // 手风琴展开/收起
+    // Accordion toggle
     document.querySelectorAll('.accordion-header').forEach(header => {
       header.addEventListener('click', () => {
         const content = header.nextElementSibling;
         const icon = header.querySelector('.accordion-icon');
 
-        // 切换显示
         if (content.classList.contains('hidden')) {
           content.classList.remove('hidden');
           icon.style.transform = 'rotate(180deg)';
@@ -456,7 +638,7 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
       });
     });
 
-    // 复制单个问题
+    // Copy single question
     document.querySelectorAll('.copy-question-btn').forEach(button => {
       button.addEventListener('click', () => {
         const question = button.dataset.question;
@@ -468,6 +650,11 @@ const allQuestions = Object.entries(questionCategories).flatMap(([category, ques
           }, 2000);
         });
       });
+    });
+
+    // Scroll to generator
+    document.getElementById('scroll-to-generator')?.addEventListener('click', () => {
+      document.getElementById('generate-btn').scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   </script>
 </Layout>
