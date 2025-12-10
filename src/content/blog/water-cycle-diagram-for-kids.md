@@ -3,7 +3,7 @@ draft: false
 title: "Water Cycle Diagram for Kids: Fun & Easy Guide with Pictures"
 snippet: "Water cycle diagram for kids explained simply! Learn the 4 stages with fun pictures, activities, and easy explanations perfect for ages 5-10."
 image:
-  src: "/images/blog/water-cycle-guide.jpg"
+  src: "https://images.unsplash.com/photo-1473186578172-c141e6798cf4?auto=format&fit=crop&w=1600&h=1200&q=80"
   alt: "Water cycle diagram for kids showing evaporation, condensation, precipitation and collection"
 publishDate: "2025-12-10"
 author: "Water Cycle Diagram Team"
@@ -22,6 +22,8 @@ This water cycle diagram for kids guide will help you understand how the same wa
 A water cycle diagram for kids is a simple picture that shows how water moves from the ocean to the sky and back again. Think of it like a giant circle - water goes round and round, changing from liquid to gas to liquid again.
 
 **Fun Fact:** The water in your glass today might have been part of a cloud last week, or even drunk by a T-Rex 65 million years ago!
+
+![Water cycle diagram for kids with clouds and rain](https://images.unsplash.com/photo-1473186578172-c141e6798cf4?auto=format&fit=crop&w=1600&h=1200&q=80)
 
 ## The 4 Stages in a Water Cycle Diagram for Kids
 

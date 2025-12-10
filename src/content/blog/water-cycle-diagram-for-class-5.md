@@ -3,8 +3,8 @@ draft: false
 title: "Water Cycle Diagram for Class 5: Complete Study Guide with Labeled Diagram"
 snippet: "Water cycle diagram for class 5 students with labeled stages, experiments, and curriculum-aligned content. Perfect study guide for 5th grade science."
 image:
-  src: "/images/blog/water-cycle-guide.jpg"
-  alt: "Water cycle diagram for class 5 showing all four stages with labels"
+  src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&h=1200&q=80"
+  alt: "Clouds over mountains showing condensation and precipitation in the water cycle"
 publishDate: "2025-12-10"
 author: "Water Cycle Diagram Team"
 category: "Education"
@@ -16,6 +16,8 @@ tags: ["water cycle diagram for class 5", "water cycle", "class 5 science", "5th
 The **water cycle diagram for class 5** is an essential topic in your science curriculum. This comprehensive guide will help you understand the hydrological cycle, its four main stages, and why it's crucial for life on Earth.
 
 This water cycle diagram for class 5 guide includes labeled diagrams, scientific explanations, hands-on experiments, and review questions to help you master this important topic.
+
+![Clouds forming over mountains showing condensation and precipitation](https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&h=1200&q=80)
 
 ## Learning Objectives
 

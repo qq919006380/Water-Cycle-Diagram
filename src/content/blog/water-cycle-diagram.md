@@ -3,7 +3,7 @@ draft: false
 title: "Water Cycle Diagram: Complete Guide with Interactive Examples"
 snippet: "Water cycle diagram explained with labeled stages, scientific data, and interactive examples. The ultimate guide for students, teachers, and science enthusiasts."
 image:
-  src: "/images/blog/water-cycle-guide.jpg"
+  src: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&h=1200&q=80"
   alt: "Water cycle diagram showing evaporation, condensation, precipitation, and collection stages"
 publishDate: "2025-12-10"
 author: "Water Cycle Diagram Team"
@@ -16,6 +16,8 @@ tags: ["water cycle diagram", "water cycle", "hydrological cycle", "science educ
 The **water cycle diagram** illustrates one of Earth's most fundamental natural processes. This comprehensive guide covers everything you need to know about the water cycle, from basic concepts to advanced scientific details.
 
 Whether you're a student learning about the water cycle diagram for the first time or a teacher looking for educational resources, this guide provides accurate, detailed information with interactive examples.
+
+![Water cycle diagram showing evaporation, condensation, precipitation, and collection](https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&h=1200&q=80)
 
 ## What is a Water Cycle Diagram?
 

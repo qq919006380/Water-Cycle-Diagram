@@ -3,8 +3,8 @@ draft: false
 title: "Water Cycle Diagram for Class 7: Advanced Guide with Climate Connections"
 snippet: "Water cycle diagram for class 7 with advanced concepts, climate change impacts, and quantitative data. Complete study guide for 7th grade science students."
 image:
-  src: "/images/blog/water-cycle-guide.jpg"
-  alt: "Water cycle diagram for class 7 showing advanced hydrological processes"
+  src: "https://images.unsplash.com/photo-1504386106331-3e4e71712b38?auto=format&fit=crop&w=1600&h=1200&q=80"
+  alt: "Storm clouds illustrating intense condensation and precipitation in the water cycle"
 publishDate: "2025-12-10"
 author: "Water Cycle Diagram Team"
 category: "Education"
@@ -16,6 +16,8 @@ tags: ["water cycle diagram for class 7", "water cycle", "class 7 science", "cli
 This comprehensive **water cycle diagram for class 7** guide explores the hydrological cycle at an advanced level. You'll learn about additional processes, quantitative data, and the critical relationship between the water cycle and climate change.
 
 The water cycle diagram for class 7 builds on what you learned in earlier grades, adding scientific depth and real-world applications that prepare you for higher-level environmental science.
+
+![Storm clouds illustrating intense condensation and precipitation](https://images.unsplash.com/photo-1504386106331-3e4e71712b38?auto=format&fit=crop&w=1600&h=1200&q=80)
 
 ## Advanced Learning Objectives
 
