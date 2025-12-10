@@ -113,6 +113,65 @@ const QUIZ_DATA = [
     </section>
   </Container>
 
+  <!-- 4 Stages Deep Dive -->
+  <Container>
+    <section class="deep-dive-section">
+      <h2>The 4 Stages of Water Cycle Diagram Explained</h2>
+
+      <article class="stage-article" id="evaporation">
+        <h3>Stage 1: Evaporation in the Water Cycle Diagram</h3>
+        <p>
+          Evaporation is the first stage shown in any water cycle diagram. When the sun heats water in oceans, lakes, and rivers, the water molecules gain energy and escape into the air as invisible water vapor. This process happens constantly - about <strong>90% of atmospheric moisture</strong> comes from ocean evaporation.
+        </p>
+        <p>
+          In a water cycle diagram, you'll see arrows rising from water bodies toward the sky. The sun provides the energy needed for this transformation. Interestingly, evaporation cools the water surface - that's why you feel cold when wet skin dries. Every day, the sun evaporates approximately <strong>1 trillion tons of water</strong> from Earth's surface.
+        </p>
+        <p>
+          Plants also contribute through <strong>transpiration</strong> - releasing water vapor through tiny pores in their leaves. Together, evaporation and transpiration are sometimes called "evapotranspiration" in detailed water cycle diagrams. Plants contribute about 10% of atmospheric water vapor.
+        </p>
+      </article>
+
+      <article class="stage-article" id="condensation">
+        <h3>Stage 2: Condensation in the Water Cycle Diagram</h3>
+        <p>
+          Condensation is the second stage in the water cycle diagram. As water vapor rises high into the atmosphere, it cools down. When the temperature drops enough, the vapor transforms back into tiny liquid water droplets. This is why you see clouds forming in water cycle diagrams at high altitudes.
+        </p>
+        <p>
+          For condensation to occur, water vapor needs something to cling to - tiny particles like dust, pollen, or sea salt floating in the air. These are called <strong>condensation nuclei</strong>. Billions of these microscopic droplets cluster together to form the clouds we see in the sky.
+        </p>
+        <p>
+          A water cycle diagram shows this stage as clouds forming. The process is the same as when you see water droplets on a cold glass of water - warm, moist air meets the cool surface and condenses. At high altitudes, temperatures can drop below <strong>-40°C</strong>, causing rapid condensation.
+        </p>
+      </article>
+
+      <article class="stage-article" id="precipitation">
+        <h3>Stage 3: Precipitation in the Water Cycle Diagram</h3>
+        <p>
+          Precipitation is the third stage depicted in water cycle diagrams. When cloud droplets combine and grow heavy enough, gravity pulls them down as rain, snow, sleet, or hail. A typical raindrop contains about <strong>1 million cloud droplets</strong> merged together.
+        </p>
+        <p>
+          The type of precipitation depends on temperature. If the air between clouds and ground stays above 0°C, we get rain. Below freezing, water falls as snow. Sleet forms when rain freezes mid-fall, while hail develops in thunderstorms where strong updrafts toss ice pellets up and down, adding layers.
+        </p>
+        <p>
+          In a water cycle diagram, precipitation is shown as arrows pointing downward from clouds. Globally, about <strong>505,000 cubic kilometers</strong> of water falls as precipitation each year. Most falls over oceans (about 78%), while land receives the rest - crucial for sustaining terrestrial life and freshwater supplies.
+        </p>
+      </article>
+
+      <article class="stage-article" id="collection">
+        <h3>Stage 4: Collection in the Water Cycle Diagram</h3>
+        <p>
+          Collection is the final stage in the water cycle diagram, where water gathers in various reservoirs. When precipitation reaches the ground, it follows different paths: some flows across the surface as <strong>runoff</strong> into rivers and lakes, some <strong>infiltrates</strong> into soil to become groundwater, and some is absorbed by plants.
+        </p>
+        <p>
+          Water cycle diagrams show collection happening in multiple locations: oceans (holding <strong>97% of Earth's water</strong>), glaciers and ice caps (69% of freshwater), groundwater (30% of freshwater), and surface water like lakes and rivers (less than 1% of freshwater).
+        </p>
+        <p>
+          The journey doesn't end here - the water cycle diagram is circular. Collected water eventually evaporates again, restarting the cycle. A single water molecule can take anywhere from <strong>9 days to 40,000 years</strong> to complete one full cycle, depending on where it travels. Water in the deep ocean may take thousands of years to resurface.
+        </p>
+      </article>
+    </section>
+  </Container>
+
   <!-- SEO Content Section (inline with keyword optimization) -->
   <Container>
     <section class="seo-section">
@@ -552,6 +611,58 @@ const QUIZ_DATA = [
     color: #856404;
   }
 
+  /* Deep Dive Section */
+  .deep-dive-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 0;
+  }
+
+  .deep-dive-section h2 {
+    color: #000;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  .stage-article {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+
+  .stage-article:last-child {
+    margin-bottom: 0;
+  }
+
+  .stage-article h3 {
+    color: #111;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #3498db;
+  }
+
+  .stage-article p {
+    color: #444;
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+
+  .stage-article p:last-child {
+    margin-bottom: 0;
+  }
+
+  .stage-article strong {
+    color: #000;
+    font-weight: 600;
+  }
+
   /* SEO Section */
   .seo-section {
     padding: 60px 0;
@@ -662,6 +773,18 @@ const QUIZ_DATA = [
     .quiz-section h2 {
       font-size: 24px;
     }
+
+    .deep-dive-section h2 {
+      font-size: 24px;
+    }
+
+    .stage-article {
+      padding: 24px;
+    }
+
+    .stage-article h3 {
+      font-size: 18px;
+    }
   }
 
   @media (max-width: 480px) {
@@ -696,6 +819,28 @@ const QUIZ_DATA = [
     .quiz-option {
       font-size: 14px;
       padding: 12px 16px;
+    }
+
+    .deep-dive-section {
+      padding: 40px 0;
+    }
+
+    .deep-dive-section h2 {
+      font-size: 22px;
+      margin-bottom: 30px;
+    }
+
+    .stage-article {
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .stage-article h3 {
+      font-size: 17px;
+    }
+
+    .stage-article p {
+      font-size: 14px;
     }
   }
 </style>

@@ -19,7 +19,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
 const {
   title,
-  description = "Interactive water cycle diagram with animated 4 stages: evaporation, condensation, precipitation & collection. Free educational tool with quiz for students K-12.",
+  description = "Learn about the water cycle with interactive diagrams and educational content.",
   image = "/opengraph.jpg",
   noindex = false,
   bodyClass = ""
@@ -29,7 +29,7 @@ const resolvedImageWithDomain = new URL(image, Astro.site).toString();
 
 const makeTitle = title
   ? title + " | Water Cycle Diagram"
-  : "Water Cycle Diagram: 4 Stages Interactive Animation | Free Learning Tool";
+  : "Water Cycle Diagram";
 ---
 
 <!doctype html>
@@ -58,7 +58,7 @@ const makeTitle = title
           image: resolvedImageWithDomain,
         },
         image: {
-          alt: "Water Cycle Diagram showing 4 stages: evaporation, condensation, precipitation, collection",
+          alt: "Water Cycle Diagram",
         },
       }}
     />
